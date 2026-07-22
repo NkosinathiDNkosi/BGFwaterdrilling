@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <!-- SEO: edit shared metadata here and page-specific blocks in index.html. -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eef8fc">
+  <meta name="description" content="{% block meta_description %}Premium borehole drilling, pump installation and complete water systems in Burgersfort, Steelpoort and surrounding Limpopo areas.{% endblock %}">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="author" content="Burgersfort Water Drilling">
+  <title>{% block title %}Burgersfort Water Drilling | Premium Borehole Specialists{% endblock %}</title>
+  <link rel="canonical" href="https://burgersfortwaterdrilling.co.za/">
+
+  <!-- Browser and device icons -->
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}?v=6">
+  <link rel="icon" type="image/png" sizes="48x48" href="{{ url_for('static', filename='favicon-48x48.png') }}?v=6">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}?v=6">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}?v=6">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}?v=6">
+  <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}?v=6">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?v=6">
+
+  <!-- Social sharing metadata -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Burgersfort Water Drilling">
+  <meta property="og:locale" content="en_ZA">
+  <meta property="og:url" content="https://burgersfortwaterdrilling.co.za/">
+  <meta property="og:title" content="Burgersfort Water Drilling">
+  <meta property="og:description" content="Borehole drilling, pumps and complete water systems in Burgersfort, Steelpoort and surrounding Limpopo areas.">
+  <meta property="og:image" content="{{ url_for('static', filename='hero-premium.webp', _external=True) }}">
+  <meta property="og:image:alt" content="Burgersfort Water Drilling borehole team on site">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Burgersfort Water Drilling">
+  <meta name="twitter:description" content="Book a free borehole site survey in Burgersfort and surrounding Limpopo areas.">
+  <meta name="twitter:image" content="{{ url_for('static', filename='hero-premium.webp', _external=True) }}">
+
+  <link rel="preload" as="image" href="{{ url_for('static', filename='hero-drilling.webp') }}" fetchpriority="high">
+
+  <!-- External typography and icon dependencies. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- The labelled stylesheet sections follow the order of index.html. -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Burgersfort Water Drilling",
+    "url": "https://burgersfortwaterdrilling.co.za/",
+    "logo": "{{ url_for('static', filename='brand-logo.webp', _external=True) }}",
+    "image": "{{ url_for('static', filename='hero-premium.webp', _external=True) }}",
+    "telephone": "+27 81 802 1758",
+    "email": "burgersfortwaterdrilling@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Stand no. 34, Ga Madiseng",
+      "addressLocality": "Burgersfort",
+      "postalCode": "1150",
+      "addressRegion": "Limpopo",
+      "addressCountry": "ZA"
+    },
+    "areaServed": ["Burgersfort", "Steelpoort", "Jane Furse", "Ohrigstad", "Tubatse", "Marble Hall", "Groblersdal", "Limpopo"],
+    "sameAs": ["https://www.facebook.com/profile.php?id=61591641160093"],
+    "priceRange": "$$"
+  }
+  </script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  {% block body %}{% endblock %}
+
+  <!-- Shared interactions load after the page for faster first paint. -->
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

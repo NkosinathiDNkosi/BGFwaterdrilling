@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+{% block title %}Borehole Drilling Burgersfort | Free Site Survey{% endblock %}
+{% block meta_description %}Professional borehole drilling, pump installation, PVC casing and complete water systems in Burgersfort, Steelpoort and surrounding Limpopo areas. Request a free site survey.{% endblock %}
+{% block body %}
+<!-- PAGE MAP: Navigation → Hero → About → Services → Process → Pricing →
+     Gallery → Testimonials → FAQ → Contact → Footer. Search these labels. -->
+
+<!-- NAVIGATION: link href values must match the section IDs below. -->
+<header class="site-header" id="site-header">
+  <div class="container nav-shell">
+    <a href="#home" class="brand" aria-label="Burgersfort Water Drilling home">
+      <img class="brand-logo" src="{{ url_for('static', filename='brand-logo.webp') }}" alt="Burgersfort Water Drilling logo" width="58" height="58">
+      <span class="brand-copy"><strong>BURGERSFORT</strong><small>WATER DRILLING</small></span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <a class="nav-cta" href="#contact">Secure a survey <i class="fa-solid fa-arrow-right"></i></a>
+    <button class="menu-button" id="menu-button" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" aria-hidden="true">
+    <a href="#about">About</a><a href="#services">Services</a><a href="#process">Process</a>
+    <a href="#pricing">Pricing</a><a href="#gallery">Gallery</a><a href="#contact">Secure a survey</a>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <!-- Static hero photograph with a lightweight burst-aligned screen splash. -->
+    <div class="hero-bg" aria-hidden="true">
+      <img id="hero-photo" class="hero-photo" src="{{ url_for('static', filename='hero-drilling.webp') }}" alt="Borehole drilling operation in Burgersfort, Limpopo" width="1408" height="768" fetchpriority="high" decoding="async">
+      <div class="screen-splash" id="screen-splash">
+        <span class="splash-core"></span>
+        <span class="splash-ring"></span>
+        <span class="splash-mist"></span>
+        <span class="splash-drop d1"></span>
+        <span class="splash-drop d2"></span>
+        <span class="splash-drop d3"></span>
+        <span class="splash-drop d4"></span>
+        <span class="splash-drop d5"></span>
+        <span class="splash-drop d6"></span>
+      </div>
+    </div>
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="container hero-grid">
+      <div class="hero-copy reveal">
+        <img class="hero-brand" src="{{ url_for('static', filename='brand-logo.webp') }}" alt="Burgersfort Water Drilling">
+        <div class="eyebrow"><span></span> Borehole specialists in Burgersfort & surrounding areas</div>
+        <h1>Borehole drilling<br><em>built for reliable water.</em></h1>
+        <p>From the first site assessment to pumps, casing and storage, one local team coordinates your complete water system across Burgersfort and surrounding Limpopo areas.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary magnetic" href="#contact">Book a free site survey <i class="fa-solid fa-arrow-right"></i></a>
+          <a class="btn btn-ghost" href="tel:+27818021758"><i class="fa-solid fa-phone"></i> 0818021758</a>
+        </div>
+        <div class="hero-proof">
+          <span><i class="fa-solid fa-location-dot"></i> Local Limpopo team</span>
+          <span><i class="fa-solid fa-shield-halved"></i> Complete installations</span>
+          <span><i class="fa-solid fa-headset"></i> Direct support</span>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-cue" aria-hidden="true"><span></span> Explore</div>
+  </section>
+
+  <!-- BENEFIT STRIP -->
+  <section class="marquee" aria-label="Core services">
+    <div class="marquee-track">
+      <span>BOREHOLE DRILLING</span><i>•</i><span>WATER SURVEYS</span><i>•</i><span>PUMP SYSTEMS</span><i>•</i><span>JOJO TANK INTEGRATION</span><i>•</i>
+      <span>BOREHOLE DRILLING</span><i>•</i><span>WATER SURVEYS</span><i>•</i><span>PUMP SYSTEMS</span><i>•</i><span>JOJO TANK INTEGRATION</span>
+    </div>
+  </section>
+
+  <!-- ABOUT + WHY CHOOSE US -->
+  <section class="section about" id="about">
+    <div class="container about-grid">
+      <div class="about-media reveal">
+        <img src="{{ url_for('static', filename='about-premium.webp') }}" alt="Burgersfort Water Drilling equipment on site" width="1400" height="1000" loading="lazy" decoding="async">
+        <div class="experience-badge"><strong>LOCAL</strong><span>Professional drilling team</span></div>
+      </div>
+      <div class="about-copy reveal delay-1">
+        <span class="section-kicker">01 — About us</span>
+        <h2>Water independence,<br><em>delivered properly.</em></h2>
+        <p class="lead">A borehole is more than a drilling job. It is a long-term property investment that deserves planning, reliable equipment and one accountable team.</p>
+        <p>We coordinate every stage—from site assessment and drilling to PVC casing, pump installation, storage and commissioning.</p>
+        <div class="reason-grid">
+          <div><i class="fa-solid fa-compass-drafting"></i><strong>Clear planning</strong><span>Every project starts with a site assessment.</span></div>
+          <div><i class="fa-solid fa-layer-group"></i><strong>Complete systems</strong><span>Drilling, casing, pumps and storage.</span></div>
+          <div><i class="fa-solid fa-comments"></i><strong>Direct support</strong><span>Speak to a local team throughout.</span></div>
+          <div><i class="fa-solid fa-receipt"></i><strong>Transparent pricing</strong><span>Catalogue guidance before final quotation.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section services" id="services">
+    <div class="container">
+      <div class="section-heading reveal">
+        <div><span class="section-kicker">02 — Our services</span><h2>A complete water system,<br><em>from ground to tap.</em></h2></div>
+        <p>Choose an individual service or allow us to coordinate the full borehole installation.</p>
+      </div>
+
+      <div class="service-grid">
+        {% for image,title,copy in [
+          ('service-drilling.webp','Borehole drilling','Professional drilling for residential, agricultural and commercial properties.'),
+          ('service-survey.webp','Site surveys','A practical assessment of access, terrain and expected water needs.'),
+          ('service-installation.webp','Complete installations','Casing, pumps, controls, storage and delivery equipment.'),
+          ('service-pump.webp','Pump systems','Reliable pump installation and maintenance for everyday water access.')
+        ] %}
+        <article class="service-card image-card reveal">
+          <img src="{{ url_for('static', filename=image) }}" alt="{{ title }} by Burgersfort Water Drilling" width="1200" height="800" loading="lazy" decoding="async">
+          <div class="service-card-body"><h3>{{ title }}</h3><p>{{ copy }}</p><a href="#contact">Enquire <i class="fa-solid fa-arrow-right"></i></a></div>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section process" id="process">
+    <div class="container">
+      <div class="section-heading centered reveal">
+        <span class="section-kicker">03 — The borehole journey</span>
+        <h2>Six clear steps to<br><em>strong water flow.</em></h2>
+      </div>
+      <div class="process-line" aria-hidden="true"></div>
+      <div class="process-grid">
+        {% for number,icon,title,copy in [
+          ('01','fa-location-crosshairs','Survey','We assess access, conditions and expected demand.'),
+          ('02','fa-bore-hole','Drilling','The borehole is drilled to the suitable depth.'),
+          ('03','fa-circle-notch','PVC','The hole is supported and protected with casing.'),
+          ('04','fa-gears','Pump','A suitable pump and control system are installed.'),
+          ('05','fa-database','JoJo tank','Storage and delivery are connected where required.'),
+          ('06','fa-droplet','Water','The completed system is commissioned for use.')
+        ] %}
+        <article class="process-card reveal"><span>{{ number }}</span><div class="process-icon"><i class="fa-solid {{ icon }}"></i></div><h3>{{ title }}</h3><p>{{ copy }}</p></article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING CALCULATOR -->
+  <section class="section pricing" id="pricing">
+    <div class="container pricing-grid">
+      <div class="pricing-copy reveal">
+        <span class="section-kicker">04 — Pricing guidance</span>
+        <h2>Plan your project<br><em>with confidence.</em></h2>
+        <p>Use the calculator for an indicative package estimate. Ground conditions, steel casing, cable and tank requirements can affect the final quotation.</p>
+        <div class="price-benefits"><span><i class="fa-solid fa-check"></i> Free survey</span><span><i class="fa-solid fa-check"></i> Free local transport</span><span><i class="fa-solid fa-check"></i> Instalment option</span></div>
+      </div>
+
+      <div class="calculator reveal delay-1">
+        <div class="calculator-header"><div><span>PACKAGE CALCULATOR</span><small>Catalogue estimate</small></div><i class="fa-solid fa-calculator"></i></div>
+        <label class="field-label">Estimated drilling depth
+          <select id="depth-select">{% for d in range(30,101,5) %}<option value="{{ d }}" {% if d == 50 %}selected{% endif %}>{{ d }} metres</option>{% endfor %}</select>
+        </label>
+        <div class="check-grid">
+          <label><input id="include-pvc" type="checkbox" checked><span></span> Include PVC casing</label>
+          <label><input id="include-pump" type="checkbox" checked><span></span> Include pump</label>
+        </div>
+        <div class="estimate-box" aria-live="polite"><small>Estimated package</small><strong id="calculator-total">R35 000</strong><p id="calculator-breakdown">Drilling R15 000 + PVC R8 500 + Pump R11 500</p></div>
+        <a id="calculator-whatsapp" class="btn btn-primary full" href="#">Request this package <i class="fa-brands fa-whatsapp"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="section gallery" id="gallery">
+    <div class="container">
+      <div class="section-heading light reveal"><div><span class="section-kicker">05 — Recent work</span><h2>Real equipment.<br><em>Real local projects.</em></h2></div><p>Explore our drilling operations, surveying equipment and installations.</p></div>
+      <div class="gallery-grid">
+        {% for image,label in [('gallery-active-drilling.webp','Active drilling'),('gallery-mobile-unit.webp','Mobile drilling unit'),('gallery-operations.webp','Site operations'),('gallery-setup.webp','Project setup'),('gallery-survey.webp','Water survey'),('gallery-preparation.webp','System preparation')] %}
+        <button class="gallery-item reveal" data-lightbox="{{ url_for('static', filename=image) }}"><img src="{{ url_for('static', filename=image) }}" alt="{{ label }} in Limpopo" width="900" height="1200" loading="lazy" decoding="async"><span>{{ label }} <i class="fa-solid fa-expand"></i></span></button>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST PROMISES — factual content until verified reviews are available -->
+  <section class="section testimonials" id="testimonials">
+    <div class="container">
+      <div class="section-heading reveal"><div><span class="section-kicker">06 — What to expect</span><h2>Clear communication.<br><em>One accountable team.</em></h2></div><p>A straightforward process from your first enquiry to the completed water system.</p></div>
+      <div class="testimonial-grid">
+        <article class="testimonial-card promise-card reveal"><i class="fa-solid fa-map-location-dot"></i><strong>Site-specific guidance</strong><p>Your quote is shaped around access, expected depth, ground conditions and water needs.</p></article>
+        <article class="testimonial-card promise-card reveal"><i class="fa-solid fa-file-invoice-dollar"></i><strong>Transparent quotation</strong><p>Understand the drilling, casing, pump and storage components before work begins.</p></article>
+        <article class="testimonial-card promise-card reveal"><i class="fa-solid fa-screwdriver-wrench"></i><strong>Complete installation</strong><p>Coordinate the essential components through one local water-system team.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ + SEO SERVICE AREAS -->
+  <section class="section faq" id="faq">
+    <div class="container faq-grid">
+      <div class="faq-intro reveal"><span class="section-kicker">07 — Frequently asked</span><h2>Before you<br><em>book your survey.</em></h2><p>Clear answers help you make a better decision before work begins.</p></div>
+      <div class="faq-list reveal delay-1">
+        {% for q,a in [
+          ('Is the site survey really free?','Yes. The business advertises a free survey and free local transport within its operating area. Confirm availability when booking.'),
+          ('How deep will my borehole need to be?','Depth depends on the site and underground conditions. The survey and drilling process help determine the appropriate depth.'),
+          ('Does the package include a JoJo tank?','Tank supply and integration can be added to the system. The final package is configured around your property and water needs.'),
+          ('Can I pay in instalments?','The company advertises a three-month instalment option. The payment arrangement should be confirmed directly before work starts.'),
+          ('What can change the final price?','Depth, ground stability, extra steel casing, cable length, pump size and storage requirements may affect the final quotation.')
+        ] %}
+        <article class="faq-item"><button type="button"><span>{{ q }}</span><i class="fa-solid fa-plus"></i></button><div><p>{{ a }}</p></div></article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="service-areas" aria-label="Service areas">
+    <div class="container"><span>Serving Limpopo</span><p>Burgersfort · Steelpoort · Jane Furse · Lebowakgomo · Ohrigstad · Tubatse · Marble Hall · Groblersdal and surrounding areas</p></div>
+  </section>
+
+  <!-- APPOINTMENT-FOCUSED CTA -->
+  <section class="section contact" id="contact">
+    <div class="contact-bg" aria-hidden="true"></div>
+    <div class="container contact-grid">
+      <div class="contact-copy reveal">
+        <span class="section-kicker light-kicker">08 — Secure your assessment</span>
+        <h2>Your property could have<br><em>its own water source.</em></h2>
+        <p>Tell us where the property is and what you need. The team will contact you to discuss the next available survey slot.</p>
+        <div class="contact-details">
+          <a href="tel:+27818021758"><i class="fa-solid fa-phone"></i><span><small>Office</small>081 802 1758</span></a>
+          <a href="https://wa.me/27818021758"><i class="fa-brands fa-whatsapp"></i><span><small>WhatsApp</small>081 802 1758</span></a>
+          <a href="mailto:burgersfortwaterdrilling@gmail.com"><i class="fa-solid fa-envelope"></i><span><small>Email</small>burgersfortwaterdrilling@gmail.com</span></a>
+        </div>
+      </div>
+
+      <form class="appointment-form reveal delay-1" action="{{ url_for('submit_enquiry') }}" method="post">
+        <div class="form-heading"><span>FREE SITE SURVEY</span><h3>Request an appointment</h3><p>Complete the form and we will call you back.</p></div>
+        {% with messages = get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
+        <div class="form-row"><label>Full name<input name="full_name" required placeholder="Your full name"></label><label>Phone number<input name="phone" required placeholder="e.g. 081 802 1758"></label></div>
+        <div class="form-row"><label>Property location<input name="location" required placeholder="Town or area"></label><label>Email address<input name="email" type="email" placeholder="Optional"></label></div>
+        <label>Service required<select name="service" required><option value="">Choose a service</option>{% for service in services %}<option>{{ service }}</option>{% endfor %}</select></label>
+        <label>Tell us about the property<textarea name="message" rows="4" placeholder="Home, farm, business, preferred depth or any questions..."></textarea></label>
+        <button class="btn btn-primary full" type="submit">Secure my free survey <i class="fa-solid fa-arrow-right"></i></button>
+        <p class="form-note"><i class="fa-solid fa-lock"></i> Your details are used only to respond to this enquiry.</p>
+      </form>
+    </div>
+  </section>
+
+<footer>
+  <div class="container footer-grid">
+    <div><a class="brand footer-brand" href="#home"><img class="brand-logo" src="{{ url_for('static', filename='brand-logo.webp') }}" alt="Burgersfort Water Drilling logo" width="58" height="58"><span class="brand-copy"><strong>BURGERSFORT</strong><small>WATER DRILLING</small></span></a><p>Complete borehole and private-water systems across Limpopo.</p><div class="footer-socials"><a class="facebook-link" href="https://www.facebook.com/profile.php?id=61591641160093" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i> Follow on Facebook</a></div></div>
+    <div><strong>Quick links</strong><a href="#about">About</a><a href="#services">Services</a><a href="#pricing">Pricing</a><a href="#contact">Book a survey</a></div>
+    <div><strong>Office</strong><span>P.O Box 5483</span><span>Stand no.34, Ga Madiseng, Burgersfort, 1150</span><span>Reg No: 2025/467469/07</span></div>
+  </div>
+  <div class="container footer-bottom"><span>© {{ year }} Burgersfort Water Drilling</span><a href="/admin/login">Staff access</a></div>
+</footer>
+
+<a class="floating-book" href="#contact"><i class="fa-solid fa-calendar-check"></i><span>BOOK<br>SURVEY</span></a>
+<a class="floating-facebook" href="https://www.facebook.com/profile.php?id=61591641160093" target="_blank" rel="noopener noreferrer" aria-label="Visit Burgersfort Water Drilling on Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+<a class="floating-whatsapp" href="https://wa.me/27818021758?text=Hello%20Burgersfort%20Water%20Drilling%2C%20I%20would%20like%20to%20book%20a%20free%20survey." aria-label="Chat on WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Project image"><button class="lightbox-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button><img alt="Expanded project"></div>
+{% endblock %}

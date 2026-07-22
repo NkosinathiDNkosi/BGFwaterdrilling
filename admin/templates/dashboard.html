@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Operations Dashboard · Burgersfort Water Drilling{% endblock %}
+{% block content %}
+<section class="welcome-row">
+  <div><p class="eyebrow">Live business overview</p><h1>Good day, {{ session.get('admin_username', 'Admin')|title }}.</h1><p>Manage new drilling enquiries, quotes and scheduled projects from one place.</p></div>
+  <div class="welcome-actions"><span class="live-chip"><i></i> System live</span><a class="primary-btn" href="{{ url_for('export_csv') }}">Export report <b>↓</b></a></div>
+</section>
+
+<section class="stats-grid">
+  <article class="stat-card"><div class="stat-top"><span class="stat-icon water">◉</span><em>All time</em></div><small>Total enquiries</small><strong>{{ totals.all }}</strong><p>Every active customer request</p></article>
+  <article class="stat-card"><div class="stat-top"><span class="stat-icon alert">✦</span><em>Needs action</em></div><small>New leads</small><strong>{{ totals.new }}</strong><p>Waiting for first contact</p></article>
+  <article class="stat-card"><div class="stat-top"><span class="stat-icon schedule">◷</span><em>Pipeline</em></div><small>Scheduled jobs</small><strong>{{ active_projects }}</strong><p>Upcoming drilling work</p></article>
+  <article class="stat-card"><div class="stat-top"><span class="stat-icon success">↗</span><em>Lead success</em></div><small>Completion rate</small><strong>{{ conversion }}%</strong><p>Completed from all enquiries</p></article>
+</section>
+
+<section class="dashboard-grid">
+  <article class="panel activity-panel">
+    <div class="panel-head"><div><p class="eyebrow">Demand pulse</p><h2>Enquiry activity</h2></div><span>Last 7 days</span></div>
+    {% set peak = [day_counts|map(attribute='count')|max, 1]|max %}
+    <div class="chart"><div class="chart-lines"><i></i><i></i><i></i><i></i></div>{% for day in day_counts %}<div class="bar-item"><div class="bar-wrap"><div class="bar" style="height:{{ 10 + (day.count / peak * 90) }}%"><b>{{ day.count }}</b></div></div><small>{{ day.label }}</small></div>{% endfor %}</div>
+  </article>
+  <article class="panel pipeline-panel">
+    <div class="panel-head"><div><p class="eyebrow">Project pipeline</p><h2>Workflow</h2></div><span>{{ totals.all }} leads</span></div>
+    {% set stages = [('New','new'),('Contacted','contacted'),('Quoted','quoted'),('Scheduled','scheduled'),('Completed','completed')] %}
+    <div class="pipeline-list">{% for label,key in stages %}<a href="{{ url_for('dashboard', status=label) }}"><span><i class="dot {{ key }}"></i>{{ label }}</span><strong>{{ totals[key] }}</strong><div><b style="width:{{ (totals[key] / totals.all * 100) if totals.all else 0 }}%"></b></div></a>{% endfor %}</div>
+  </article>
+</section>
+
+<section class="panel records-panel" id="enquiries">
+  <div class="records-top"><div><p class="eyebrow">Lead management</p><h2>Customer enquiries</h2><p>Contact clients, update progress and keep the team organised.</p></div><span>{{ enquiries|length }} record{{ '' if enquiries|length == 1 else 's' }}</span></div>
+  <form class="filters" method="get">
+    <label class="search-box"><span>⌕</span><input name="q" value="{{ query }}" placeholder="Search client, location, phone or message"></label>
+    <select name="status"><option value="all">All statuses</option>{% for item in statuses %}<option value="{{ item }}" {{ 'selected' if active_status == item }}>{{ item }}</option>{% endfor %}</select>
+    <select name="service"><option value="all">All services</option>{% for item in services %}<option value="{{ item }}" {{ 'selected' if active_service == item }}>{{ item }}</option>{% endfor %}</select>
+    <button type="submit">Apply filters</button>{% if query or active_status != 'all' or active_service != 'all' %}<a class="clear-link" href="{{ url_for('dashboard') }}">Reset</a>{% endif %}
+  </form>
+  <div class="table-wrap"><table><thead><tr><th>Client</th><th>Location</th><th>Service request</th><th>Received</th><th>Status</th><th></th></tr></thead><tbody>
+  {% for enquiry in enquiries %}<tr>
+    <td><div class="customer"><span>{{ enquiry.full_name|initials }}</span><div><strong>{{ enquiry.full_name }}</strong><small>{{ enquiry.phone }}{% if enquiry.email %} · {{ enquiry.email }}{% endif %}</small></div></div></td>
+    <td><strong>{{ enquiry.location }}</strong><small class="subtle">Limpopo service area</small></td>
+    <td><strong>{{ enquiry.service }}</strong><small class="message-preview">{{ enquiry.message or 'No extra message supplied.' }}</small></td>
+    <td>{{ enquiry.created_at|pretty_date }}</td>
+    <td><span class="status status-{{ enquiry.status|lower }}">{{ enquiry.status }}</span></td>
+    <td><a class="table-action" href="{{ url_for('enquiry_detail', enquiry_id=enquiry.id) }}">Open <span>→</span></a></td>
+  </tr>{% else %}<tr><td colspan="6"><div class="empty-state"><span>💧</span><strong>No enquiries found</strong><p>New website enquiries will appear here automatically.</p></div></td></tr>{% endfor %}
+  </tbody></table></div>
+</section>
+{% endblock %}

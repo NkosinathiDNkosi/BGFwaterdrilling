@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Staff Login | Burgersfort Water Drilling{% endblock %}
+{% block body %}
+<main class="admin-auth">
+  <a class="auth-back" href="{{ url_for('index') }}"><i class="fa-solid fa-arrow-left"></i> Back to website</a>
+  <form method="POST" class="auth-card">
+    <span class="brand-mark auth-logo"><i class="fa-solid fa-droplet"></i></span>
+    <p class="auth-kicker">Secure staff access</p>
+    <h1>Enquiry dashboard</h1>
+    <p>Sign in to manage client requests and project leads.</p>
+    {% if error %}<div class="flash-message error"><i class="fa-solid fa-circle-exclamation"></i> {{ error }}</div>{% endif %}
+    <label>Username<input name="username" autocomplete="username" required></label>
+    <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+    <button class="button button-primary" type="submit">Sign in <i class="fa-solid fa-arrow-right"></i></button>
+    <small class="auth-help">Change the default admin password before publishing.</small>
+  </form>
+</main>
+{% endblock %}

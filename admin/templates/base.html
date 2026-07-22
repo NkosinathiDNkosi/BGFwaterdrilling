@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071b2a">
+  <title>{% block title %}Burgersfort Water Drilling Admin{% endblock %}</title>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}">
+      <span class="brand-logo"><img src="{{ url_for('static', filename='brand-mark.jpg') }}" alt="Burgersfort Water Drilling logo"></span>
+      <span><strong>Burgersfort</strong><small>Water Drilling</small></span>
+    </a>
+    <div class="nav-label">Workspace</div>
+    <nav>
+      <a class="{{ 'active' if request.endpoint in ['dashboard','enquiry_detail'] else '' }}" href="{{ url_for('dashboard') }}"><i>⌂</i><span>Overview</span></a>
+      <a href="{{ url_for('dashboard') }}#enquiries"><i>◫</i><span>Enquiries</span><b>{{ totals.new if totals is defined else '' }}</b></a>
+      <a href="{{ url_for('dashboard', status='Scheduled') }}"><i>◷</i><span>Scheduled jobs</span></a>
+      <a href="{{ url_for('dashboard', status='Completed') }}"><i>✓</i><span>Completed work</span></a>
+      <a class="{{ 'active' if request.endpoint == 'trash' else '' }}" href="{{ url_for('trash') }}"><i>⌫</i><span>Trash</span></a>
+    </nav>
+    <div class="crew-card">
+      <span class="pulse"></span>
+      <small>Operations status</small>
+      <strong>Team ready</strong>
+      <p>Enquiries and scheduling are online.</p>
+    </div>
+    <div class="sidebar-user">
+      <span>{{ session.get('admin_username', 'A')|initials }}</span>
+      <div><strong>{{ session.get('admin_username', 'Admin')|title }}</strong><small>Administrator</small></div>
+      <a href="{{ url_for('logout') }}" title="Sign out">↗</a>
+    </div>
+  </aside>
+  <div class="overlay" id="overlay"></div>
+  <main class="main-content">
+    <header class="topbar">
+      <button class="menu-btn" id="menuBtn" aria-label="Open navigation">☰</button>
+      <div class="topbar-copy"><span>Operations centre</span><strong>Burgersfort & surrounding areas</strong></div>
+      <div class="top-actions"><a href="mailto:info@burgersfortwaterdrilling.co.za">Support</a><a class="site-btn" href="../" target="_blank">View website ↗</a></div>
+    </header>
+    <div class="page-wrap">
+      {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</div>
+<script src="{{ url_for('static', filename='admin.js') }}"></script>
+</body>
+</html>

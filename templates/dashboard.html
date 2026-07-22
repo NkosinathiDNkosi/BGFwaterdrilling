@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Enquiry Dashboard | Burgersfort Water Drilling{% endblock %}
+{% block body %}
+<div class="dashboard-shell">
+  <aside class="dashboard-sidebar">
+    <a class="brand" href="{{ url_for('index') }}"><span class="brand-mark"><i class="fa-solid fa-droplet"></i></span><span class="brand-copy"><strong>Burgersfort <em>Water</em></strong><small>Staff dashboard</small></span></a>
+    <nav><a class="active" href="{{ url_for('dashboard') }}"><i class="fa-solid fa-inbox"></i> Enquiries</a><a href="{{ url_for('index') }}"><i class="fa-solid fa-globe"></i> View website</a></nav>
+    <a class="sidebar-logout" href="{{ url_for('logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a>
+  </aside>
+
+  <main class="dashboard-main">
+    <header class="dashboard-header"><div><p>Lead management</p><h1>Client enquiries</h1></div><span>{{ session.get('admin_username', 'Admin') }}</span></header>
+    <section class="stats-grid">
+      <article><i class="fa-solid fa-layer-group"></i><div><span>Total enquiries</span><strong>{{ stats.total }}</strong></div></article>
+      <article><i class="fa-solid fa-bell"></i><div><span>New leads</span><strong>{{ stats.new }}</strong></div></article>
+      <article><i class="fa-solid fa-file-invoice-dollar"></i><div><span>Quoted</span><strong>{{ stats.quoted }}</strong></div></article>
+      <article><i class="fa-solid fa-calendar-check"></i><div><span>Scheduled</span><strong>{{ stats.scheduled }}</strong></div></article>
+    </section>
+
+    <section class="dashboard-table-card">
+      <div class="table-heading"><div><h2>Latest requests</h2><p>Update the status as each lead moves forward.</p></div></div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Date</th><th>Client</th><th>Location</th><th>Service</th><th>Message</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            {% for enquiry in enquiries %}
+            <tr>
+              <td>{{ enquiry.created_at }}</td>
+              <td><strong>{{ enquiry.full_name }}</strong><a href="tel:{{ enquiry.phone }}">{{ enquiry.phone }}</a>{% if enquiry.email %}<a href="mailto:{{ enquiry.email }}">{{ enquiry.email }}</a>{% endif %}</td>
+              <td>{{ enquiry.location }}</td><td>{{ enquiry.service }}</td><td class="message-cell">{{ enquiry.message or '—' }}</td>
+              <td><form action="{{ url_for('update_status', enquiry_id=enquiry.id) }}" method="POST"><select name="status" onchange="this.form.submit()">{% for status in statuses %}<option value="{{ status }}" {% if enquiry.status == status %}selected{% endif %}>{{ status }}</option>{% endfor %}</select></form></td>
+              <td><form action="{{ url_for('delete_enquiry', enquiry_id=enquiry.id) }}" method="POST" onsubmit="return confirm('Delete this enquiry?')"><button class="delete-button" aria-label="Delete enquiry"><i class="fa-solid fa-trash"></i></button></form></td>
+            </tr>
+            {% else %}<tr><td class="empty-table" colspan="7"><i class="fa-regular fa-folder-open"></i><strong>No enquiries yet</strong><span>New website enquiries will appear here.</span></td></tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+{% endblock %}
