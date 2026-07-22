@@ -10,6 +10,7 @@ from flask import (
     Flask,
     Response,
     flash,
+    make_response,
     redirect,
     render_template,
     request,
@@ -154,7 +155,9 @@ def login_required(view_function):
 # -----------------------------------------------------------------------------
 @app.route("/")
 def index():
-    response = app.make_response(render_template(
+    # Use Flask's response helper directly because the exported ``app`` object
+    # is wrapped by DispatcherMiddleware after all routes are registered.
+    response = make_response(render_template(
         "index.html",
         services=SERVICES,
         year=datetime.now().year,
