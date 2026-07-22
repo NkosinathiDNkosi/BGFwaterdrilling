@@ -12,7 +12,12 @@ Create `FLASK_SECRET_KEY` in the hosting dashboard and give it a long random val
 
 ## Admin access
 
-The included database may still contain the original starter admin credentials. Change the admin password before sharing the `/admin/login` address or accepting real enquiries.
+The polished dashboard is mounted inside the public application at `/admin`.
+Keep the Render start command as `gunicorn app:app`; do not start
+`admin/admin_app.py` separately.
+
+Set `FLASK_SECRET_KEY`, `ADMIN_USERNAME`, and `ADMIN_PASSWORD` in Render before
+sharing the `/admin/login` address or accepting real enquiries.
 
 ## Search launch
 

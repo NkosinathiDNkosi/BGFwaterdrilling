@@ -17,6 +17,8 @@ Default login:
 - Username: `admin`
 - Password: `Admin@123`
 
-For production, set `ADMIN_USERNAME`, `ADMIN_PASSWORD` and `ADMIN_SECRET_KEY` environment variables.
+For production, this application is mounted by the main `app.py` at `/admin`.
+Render should use `gunicorn app:app`. Set `ADMIN_USERNAME`, `ADMIN_PASSWORD`
+and `FLASK_SECRET_KEY` environment variables.
 
 The admin uses the main project database: `bwd_enquiries.db`.

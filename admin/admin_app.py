@@ -17,7 +17,10 @@ PROJECT_DIR = ADMIN_DIR.parent
 DATABASE_PATH = PROJECT_DIR / "bwd_enquiries.db"
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
-app.secret_key = os.getenv("ADMIN_SECRET_KEY", "burgersfort-water-drilling-admin-2026")
+app.secret_key = os.getenv(
+    "ADMIN_SECRET_KEY",
+    os.getenv("FLASK_SECRET_KEY", "burgersfort-water-drilling-admin-2026"),
+)
 
 STATUSES = ["New", "Contacted", "Quoted", "Scheduled", "Completed", "Cancelled"]
 

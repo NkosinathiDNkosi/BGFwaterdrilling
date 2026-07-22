@@ -17,6 +17,8 @@ from flask import (
     url_for,
 )
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from werkzeug.serving import run_simple
 
 
 # -----------------------------------------------------------------------------
@@ -91,14 +93,17 @@ def init_db():
         """
     )
 
-    # Create a starter admin account only when none exists.
+    # Create the first admin from environment variables when none exists.
+    # Configure ADMIN_USERNAME and ADMIN_PASSWORD in Render before deployment.
+    admin_username = os.environ.get("ADMIN_USERNAME", "admin")
+    admin_password = os.environ.get("ADMIN_PASSWORD", "Admin@123")
     admin_exists = cursor.execute(
-        "SELECT id FROM admins WHERE username = ?", ("admin",)
+        "SELECT id FROM admins WHERE username = ?", (admin_username,)
     ).fetchone()
     if not admin_exists:
         cursor.execute(
             "INSERT INTO admins (username, password_hash) VALUES (?, ?)",
-            ("admin", generate_password_hash("Admin@123")),
+            (admin_username, generate_password_hash(admin_password)),
         )
 
     connection.commit()
@@ -311,9 +316,19 @@ def sitemap_xml():
     return Response(content, mimetype="application/xml")
 
 
+# Mount the polished operations dashboard at /admin while keeping the public
+# website as the primary application. Render should continue using app:app.
+public_app = app
+from admin.admin_app import app as admin_app
+
+app = DispatcherMiddleware(public_app, {"/admin": admin_app})
+
+
 if __name__ == "__main__":
-    app.run(
-        host="0.0.0.0",
-        port=int(os.environ.get("PORT", 5000)),
-        debug=os.environ.get("FLASK_DEBUG") == "1",
+    run_simple(
+        "0.0.0.0",
+        int(os.environ.get("PORT", 5000)),
+        app,
+        use_reloader=os.environ.get("FLASK_DEBUG") == "1",
+        use_debugger=os.environ.get("FLASK_DEBUG") == "1",
     )
