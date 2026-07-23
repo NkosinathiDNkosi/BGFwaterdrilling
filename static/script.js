@@ -169,6 +169,84 @@ document.querySelectorAll(".magnetic").forEach((button) => {
   });
 });
 
+// Recent Work slideshows — reels and project images rotate independently.
+document.querySelectorAll("[data-slideshow]").forEach((slideshow) => {
+  const slides = [...slideshow.querySelectorAll("[data-slide]")];
+  const previousButton = slideshow.querySelector("[data-slide-prev]");
+  const nextButton = slideshow.querySelector("[data-slide-next]");
+  const dotsContainer = slideshow.querySelector("[data-slide-dots]");
+  const delay = Number(slideshow.dataset.delay) || 6000;
+  let activeIndex = Math.max(
+    0,
+    slides.findIndex((slide) => slide.classList.contains("is-active")),
+  );
+  let timer;
+
+  if (slides.length < 2) return;
+
+  const dots = slides.map((_, index) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.setAttribute("aria-label", `Show item ${index + 1}`);
+    dot.addEventListener("click", () => {
+      showSlide(index);
+      restart();
+    });
+    dotsContainer?.appendChild(dot);
+    return dot;
+  });
+
+  function showSlide(index) {
+    activeIndex = (index + slides.length) % slides.length;
+    slides.forEach((slide, slideIndex) => {
+      const isActive = slideIndex === activeIndex;
+      slide.classList.toggle("is-active", isActive);
+      slide.setAttribute("aria-hidden", String(!isActive));
+    });
+    dots.forEach((dot, dotIndex) => {
+      const isActive = dotIndex === activeIndex;
+      dot.classList.toggle("is-active", isActive);
+      dot.setAttribute("aria-current", isActive ? "true" : "false");
+    });
+  }
+
+  function stop() {
+    clearInterval(timer);
+  }
+
+  function start() {
+    stop();
+    if (!document.hidden) {
+      timer = setInterval(() => showSlide(activeIndex + 1), delay);
+    }
+  }
+
+  function restart() {
+    stop();
+    start();
+  }
+
+  previousButton?.addEventListener("click", () => {
+    showSlide(activeIndex - 1);
+    restart();
+  });
+  nextButton?.addEventListener("click", () => {
+    showSlide(activeIndex + 1);
+    restart();
+  });
+  slideshow.addEventListener("mouseenter", stop);
+  slideshow.addEventListener("mouseleave", start);
+  slideshow.addEventListener("focusin", stop);
+  slideshow.addEventListener("focusout", start);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stop();
+    else start();
+  });
+
+  showSlide(activeIndex);
+  start();
+});
+
 // Lightweight, mobile-first screen splash. The photograph stays completely static.
 const splash = document.getElementById("screen-splash");
 const splashHero = document.getElementById("home");
