@@ -3588,30 +3588,3 @@ body {
     display: none !important;
   }
 }
-
-/* Official company logo lockup — full mark on the public header and footer. */
-.site-header .brand-logo,
-.footer-brand .brand-logo {
-  width: 150px;
-  height: 70px;
-  object-fit: contain;
-  border-radius: 0;
-  box-shadow: none;
-}
-
-.site-header .brand-copy,
-.footer-brand .brand-copy {
-  display: none;
-}
-
-@media (max-width: 700px) {
-  .site-header .brand-logo {
-    width: 118px;
-    height: 58px;
-  }
-
-  .footer-brand .brand-logo {
-    width: 145px;
-    height: 68px;
-  }
-}
