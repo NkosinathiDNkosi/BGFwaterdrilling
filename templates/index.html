@@ -181,6 +181,34 @@
     <div class="container">
       <div class="section-heading light reveal"><div><span class="section-kicker">05 — Recent work</span><h2>Real equipment.<br><em>Real local projects.</em></h2></div><p>Explore our drilling operations, surveying equipment and installations.</p></div>
       <div class="gallery-grid">
+        <article class="gallery-item gallery-video reveal">
+          <iframe
+            src="https://www.facebook.com/plugins/video.php?height=476&amp;href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1297033765842242%2F&amp;show_text=false&amp;width=267&amp;t=0&amp;autoplay=true&amp;mute=true"
+            title="Recent Burgersfort Water Drilling project video"
+            width="267"
+            height="476"
+            scrolling="no"
+            frameborder="0"
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+          <span>Recent drilling project <i class="fa-brands fa-facebook-f"></i></span>
+        </article>
+        <article class="gallery-item gallery-video reveal">
+          <iframe
+            src="https://www.facebook.com/plugins/video.php?height=476&amp;href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1024627963677860%2F&amp;show_text=false&amp;width=267&amp;t=0&amp;autoplay=true&amp;mute=true"
+            title="Recent Burgersfort Water Drilling installation video"
+            width="267"
+            height="476"
+            scrolling="no"
+            frameborder="0"
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+          <span>Recent installation <i class="fa-brands fa-facebook-f"></i></span>
+        </article>
         {% for image,label in [('gallery-active-drilling.webp','Active drilling'),('gallery-mobile-unit.webp','Mobile drilling unit'),('gallery-operations.webp','Site operations'),('gallery-setup.webp','Project setup'),('gallery-survey.webp','Water survey'),('gallery-preparation.webp','System preparation')] %}
         <button class="gallery-item reveal" data-lightbox="{{ url_for('static', filename=image) }}"><img src="{{ url_for('static', filename=image) }}" alt="{{ label }} in Limpopo" width="900" height="1200" loading="lazy" decoding="async"><span>{{ label }} <i class="fa-solid fa-expand"></i></span></button>
         {% endfor %}

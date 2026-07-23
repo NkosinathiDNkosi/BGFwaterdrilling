@@ -3683,29 +3683,85 @@ body {
   }
 }
 
-/* Official company logo lockup — full mark on the public header and footer. */
-.site-header .brand-logo,
-.footer-brand .brand-logo {
-  width: 150px;
-  height: 70px;
-  object-fit: contain;
-  border-radius: 0;
-  box-shadow: none;
+/* ==========================================================================
+   RECENT WORK — consistent framed images and Facebook reels
+   ========================================================================== */
+.gallery .gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: auto;
+  gap: 18px;
 }
 
-.site-header .brand-copy,
-.footer-brand .brand-copy {
+.gallery .gallery-item:nth-child(n) {
+  grid-column: auto;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  min-height: 0;
+  padding: 7px;
+  overflow: hidden;
+  border: 1px solid rgba(78, 212, 245, 0.24);
+  border-radius: 24px;
+  background: linear-gradient(145deg, #0d3447, #061d29);
+  box-shadow:
+    0 22px 55px rgba(3, 24, 35, 0.24),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.gallery .gallery-item img,
+.gallery .gallery-item iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 17px;
+  background: #071d29;
+}
+
+.gallery .gallery-item img {
+  object-fit: cover;
+}
+
+.gallery .gallery-item::after {
+  inset: 7px;
+  border-radius: 17px;
+  pointer-events: none;
+}
+
+.gallery .gallery-video::after {
   display: none;
 }
 
-@media (max-width: 700px) {
-  .site-header .brand-logo {
-    width: 118px;
-    height: 58px;
+.gallery .gallery-item span {
+  left: 17px;
+  right: 17px;
+  bottom: 17px;
+  pointer-events: none;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.75);
+}
+
+.gallery .gallery-video span {
+  padding: 10px 11px;
+  border-radius: 12px;
+  background: rgba(3, 25, 37, 0.82);
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 980px) {
+  .gallery .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .gallery .gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
-  .footer-brand .brand-logo {
-    width: 145px;
-    height: 68px;
+  .gallery .gallery-item:nth-child(n) {
+    width: min(100%, 340px);
+    margin-inline: auto;
   }
 }
