@@ -4089,3 +4089,46 @@ body {
     margin-top: 7px;
   }
 }
+
+/* ==========================================================================
+   CROPPED LOGO — CIRCULAR ICON TREATMENT
+   The source is landscape, so a centred cover crop works better than placing
+   the entire wide image inside a circle. It makes the rig, truck and water
+   drop readable while the circular frame supplies the final crop.
+   ========================================================================== */
+.site-header .brand-logo,
+.footer-brand .brand-logo {
+  box-sizing: border-box;
+  padding: 0;
+  object-fit: cover;
+  object-position: 50% 50%;
+  background-color: #fff;
+}
+
+.site-header .brand-logo {
+  border: 1px solid rgba(12, 83, 115, 0.08);
+}
+
+.footer-brand .brand-logo {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* ==========================================================================
+   NAVIGATION VISIBILITY
+   Desktop already exposes every navigation link, so the hamburger and its
+   mobile-only menu are hidden. They are enabled only at tablet/mobile widths.
+   ========================================================================== */
+.site-header .menu-button,
+.site-header .mobile-nav {
+  display: none !important;
+}
+
+@media (max-width: 980px) {
+  .site-header .menu-button {
+    display: flex !important;
+  }
+
+  .site-header .mobile-nav {
+    display: flex !important;
+  }
+}
