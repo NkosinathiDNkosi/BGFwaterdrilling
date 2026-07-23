@@ -4033,3 +4033,59 @@ body {
     transition: none;
   }
 }
+
+/* ==========================================================================
+   HEADER BRAND ALIGNMENT
+   This final override keeps the circular logo vertically centred against the
+   complete two-line name block after all earlier responsive header rules.
+   ========================================================================== */
+.site-header .nav-shell {
+  align-items: center;
+}
+
+.site-header .brand {
+  display: inline-flex;
+  align-items: center;
+}
+
+.site-header .brand-logo {
+  display: block;
+  align-self: center;
+  margin: 0;
+}
+
+.site-header .brand-copy {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.site-header .brand-copy strong,
+.site-header .brand-copy small {
+  display: block;
+  margin-inline: 0;
+}
+
+@media (max-width: 700px) {
+  .site-header .brand {
+    min-height: 52px;
+    gap: 12px;
+  }
+
+  .site-header .brand-logo {
+    width: 50px;
+    height: 50px;
+    flex: 0 0 50px;
+  }
+
+  .site-header .brand-copy {
+    min-height: 38px;
+    transform: translateY(1px);
+  }
+
+  .site-header .brand-copy small {
+    margin-top: 7px;
+  }
+}
