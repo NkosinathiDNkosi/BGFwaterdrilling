@@ -3589,6 +3589,100 @@ body {
   }
 }
 
+/* ==========================================================================
+   FINAL LOGO PLACEMENT
+   Keeps the shared image14 logo balanced in the header and footer.
+   ========================================================================== */
+.site-header .brand {
+  flex: 0 0 auto;
+  gap: 14px;
+}
+
+.site-header .brand-logo {
+  width: 62px;
+  height: 62px;
+  flex: 0 0 62px;
+  padding: 3px;
+  object-fit: contain;
+  object-position: center;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 9px 26px rgba(7, 48, 68, 0.14);
+}
+
+.site-header .brand-copy {
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 0 14px;
+}
+
+.footer-brand .brand-logo {
+  width: 70px;
+  height: 70px;
+  flex: 0 0 70px;
+  padding: 4px;
+  object-fit: contain;
+  object-position: center;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+}
+
+.footer-brand + p {
+  width: min(100%, 440px);
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .site-header .brand {
+    gap: 10px;
+  }
+
+  .site-header .brand-logo {
+    width: 50px;
+    height: 50px;
+    flex-basis: 50px;
+    padding: 2px;
+  }
+
+  .site-header .brand-copy strong {
+    font-size: 0.76rem;
+  }
+
+  .site-header .brand-copy small {
+    font-size: 0.48rem;
+    letter-spacing: 0.15em;
+  }
+
+  .footer-grid {
+    gap: 32px;
+  }
+
+  .footer-brand {
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .footer-brand .brand-logo {
+    width: 62px;
+    height: 62px;
+    flex-basis: 62px;
+  }
+
+  .footer-brand + p {
+    max-width: 330px;
+    line-height: 1.65;
+  }
+}
+
 /* Official company logo lockup — full mark on the public header and footer. */
 .site-header .brand-logo,
 .footer-brand .brand-logo {
