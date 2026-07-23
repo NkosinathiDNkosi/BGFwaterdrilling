@@ -42,7 +42,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <!-- The labelled stylesheet sections follow the order of index.html. -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  {# Increment asset_version after CSS/JS design changes so browsers and Render
+     never combine a new template with an older cached stylesheet. #}
+  {% set asset_version = '20260723-square-showcase-v2' %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=asset_version) }}">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -72,7 +75,7 @@
   {% block body %}{% endblock %}
 
   <!-- Shared interactions load after the page for faster first paint. -->
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script src="{{ url_for('static', filename='script.js', v=asset_version) }}"></script>
   {% block extra_scripts %}{% endblock %}
 </body>
 </html>
