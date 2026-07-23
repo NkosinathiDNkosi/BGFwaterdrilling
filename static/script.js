@@ -176,11 +176,16 @@ document.querySelectorAll("[data-slideshow]").forEach((slideshow) => {
   const nextButton = slideshow.querySelector("[data-slide-next]");
   const dotsContainer = slideshow.querySelector("[data-slide-dots]");
   const delay = Number(slideshow.dataset.delay) || 6000;
+  const swipeSurface =
+    slideshow.querySelector(".reel-stage") ||
+    slideshow.querySelector(".project-stage");
   let activeIndex = Math.max(
     0,
     slides.findIndex((slide) => slide.classList.contains("is-active")),
   );
   let timer;
+  let touchStartX = 0;
+  let touchStartY = 0;
 
   if (slides.length < 2) return;
 
@@ -234,6 +239,36 @@ document.querySelectorAll("[data-slideshow]").forEach((slideshow) => {
     showSlide(activeIndex + 1);
     restart();
   });
+
+  // Allow a natural left/right swipe on touch devices while preserving
+  // ordinary vertical page scrolling. The arrows remain available as a
+  // dependable alternative, including for embedded Facebook players.
+  swipeSurface?.addEventListener(
+    "touchstart",
+    (event) => {
+      const touch = event.changedTouches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    },
+    { passive: true },
+  );
+  swipeSurface?.addEventListener(
+    "touchend",
+    (event) => {
+      const touch = event.changedTouches[0];
+      const distanceX = touch.clientX - touchStartX;
+      const distanceY = touch.clientY - touchStartY;
+
+      if (Math.abs(distanceX) < 45 || Math.abs(distanceX) <= Math.abs(distanceY)) {
+        return;
+      }
+
+      showSlide(activeIndex + (distanceX < 0 ? 1 : -1));
+      restart();
+    },
+    { passive: true },
+  );
+
   slideshow.addEventListener("mouseenter", stop);
   slideshow.addEventListener("mouseleave", start);
   slideshow.addEventListener("focusin", stop);
