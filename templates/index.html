@@ -295,7 +295,7 @@
   </section>
 
   <!-- APPOINTMENT-FOCUSED CTA -->
-  <section class="section contact" id="contact">
+  <section class="contact-section">
     <div class="contact-bg" aria-hidden="true"></div>
     <div class="container contact-grid">
       <div class="contact-copy reveal">
@@ -309,7 +309,7 @@
         </div>
       </div>
 
-      <form class="appointment-form reveal delay-1" action="{{ url_for('submit_enquiry') }}" method="post">
+      <form id="contact" class="appointment-form reveal delay-1" action="{{ url_for('submit_enquiry') }}" method="post">
         <div class="form-heading"><span>FREE SITE SURVEY</span><h3>Request an appointment</h3><p>Complete the form and we will call you back.</p></div>
         {% with messages = get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
         <div class="form-row"><label>Full name<input name="full_name" required placeholder="Your full name"></label><label>Phone number<input name="phone" required placeholder="e.g. 081 802 1758"></label></div>
