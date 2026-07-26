@@ -4132,3 +4132,13 @@ body {
     display: flex !important;
   }
 }
+/* Position appointment form correctly when opening /#contact */
+#contact {
+    scroll-margin-top: 110px;
+}
+
+@media (max-width: 768px) {
+    #contact {
+        scroll-margin-top: 85px;
+    }
+}
