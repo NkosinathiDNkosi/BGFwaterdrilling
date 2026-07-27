@@ -1432,6 +1432,27 @@ footer {
     grid-column: 1/-1;
   }
 }
+
+/* Availability guidance beneath the estimated drilling-date selector. */
+.appointment-form .field-help {
+  display: block;
+  margin-top: 8px;
+  color: rgba(8, 48, 68, 0.68);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+/* Make every #contact link land on the appointment card below the fixed header. */
+#contact {
+  scroll-margin-top: 110px;
+}
+
+@media (max-width: 768px) {
+  #contact {
+    scroll-margin-top: 84px;
+  }
+}
 @media (max-width: 650px) {
   .container {
     width: min(100% - 28px, 1180px);
@@ -4131,14 +4152,4 @@ body {
   .site-header .mobile-nav {
     display: flex !important;
   }
-}
-/* Position appointment form correctly when opening /#contact */
-#contact {
-    scroll-margin-top: 110px;
-}
-
-@media (max-width: 768px) {
-    #contact {
-        scroll-margin-top: 85px;
-    }
 }

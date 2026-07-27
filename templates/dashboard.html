@@ -21,17 +21,17 @@
       <div class="table-heading"><div><h2>Latest requests</h2><p>Update the status as each lead moves forward.</p></div></div>
       <div class="table-scroll">
         <table>
-          <thead><tr><th>Date</th><th>Client</th><th>Location</th><th>Service</th><th>Message</th><th>Status</th><th></th></tr></thead>
+          <thead><tr><th>Received</th><th>Client</th><th>Home Address</th><th>Drilling date</th><th>Service</th><th>Message</th><th>Status</th><th></th></tr></thead>
           <tbody>
             {% for enquiry in enquiries %}
             <tr>
               <td>{{ enquiry.created_at }}</td>
               <td><strong>{{ enquiry.full_name }}</strong><a href="tel:{{ enquiry.phone }}">{{ enquiry.phone }}</a>{% if enquiry.email %}<a href="mailto:{{ enquiry.email }}">{{ enquiry.email }}</a>{% endif %}</td>
-              <td>{{ enquiry.location }}</td><td>{{ enquiry.service }}</td><td class="message-cell">{{ enquiry.message or '—' }}</td>
+              <td>{{ enquiry.location }}</td><td>{{ enquiry.preferred_drilling_date or 'Not selected' }}</td><td>{{ enquiry.service }}</td><td class="message-cell">{{ enquiry.message or '—' }}</td>
               <td><form action="{{ url_for('update_status', enquiry_id=enquiry.id) }}" method="POST"><select name="status" onchange="this.form.submit()">{% for status in statuses %}<option value="{{ status }}" {% if enquiry.status == status %}selected{% endif %}>{{ status }}</option>{% endfor %}</select></form></td>
               <td><form action="{{ url_for('delete_enquiry', enquiry_id=enquiry.id) }}" method="POST" onsubmit="return confirm('Delete this enquiry?')"><button class="delete-button" aria-label="Delete enquiry"><i class="fa-solid fa-trash"></i></button></form></td>
             </tr>
-            {% else %}<tr><td class="empty-table" colspan="7"><i class="fa-regular fa-folder-open"></i><strong>No enquiries yet</strong><span>New website enquiries will appear here.</span></td></tr>{% endfor %}
+            {% else %}<tr><td class="empty-table" colspan="8"><i class="fa-regular fa-folder-open"></i><strong>No enquiries yet</strong><span>New website enquiries will appear here.</span></td></tr>{% endfor %}
           </tbody>
         </table>
       </div>

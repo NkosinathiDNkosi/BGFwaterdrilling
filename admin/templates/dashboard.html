@@ -34,15 +34,16 @@
     <select name="service"><option value="all">All services</option>{% for item in services %}<option value="{{ item }}" {{ 'selected' if active_service == item }}>{{ item }}</option>{% endfor %}</select>
     <button type="submit">Apply filters</button>{% if query or active_status != 'all' or active_service != 'all' %}<a class="clear-link" href="{{ url_for('dashboard') }}">Reset</a>{% endif %}
   </form>
-  <div class="table-wrap"><table><thead><tr><th>Client</th><th>Location</th><th>Service request</th><th>Received</th><th>Status</th><th></th></tr></thead><tbody>
+  <div class="table-wrap"><table><thead><tr><th>Client</th><th>Home Address</th><th>Drilling date</th><th>Service request</th><th>Received</th><th>Status</th><th></th></tr></thead><tbody>
   {% for enquiry in enquiries %}<tr>
     <td><div class="customer"><span>{{ enquiry.full_name|initials }}</span><div><strong>{{ enquiry.full_name }}</strong><small>{{ enquiry.phone }}{% if enquiry.email %} · {{ enquiry.email }}{% endif %}</small></div></div></td>
     <td><strong>{{ enquiry.location }}</strong><small class="subtle">Limpopo service area</small></td>
+    <td><strong>{{ enquiry.preferred_drilling_date or 'Not selected' }}</strong><small class="subtle">Estimated date</small></td>
     <td><strong>{{ enquiry.service }}</strong><small class="message-preview">{{ enquiry.message or 'No extra message supplied.' }}</small></td>
     <td>{{ enquiry.created_at|pretty_date }}</td>
     <td><span class="status status-{{ enquiry.status|lower }}">{{ enquiry.status }}</span></td>
     <td><a class="table-action" href="{{ url_for('enquiry_detail', enquiry_id=enquiry.id) }}">Open <span>→</span></a></td>
-  </tr>{% else %}<tr><td colspan="6"><div class="empty-state"><span>💧</span><strong>No enquiries found</strong><p>New website enquiries will appear here automatically.</p></div></td></tr>{% endfor %}
+  </tr>{% else %}<tr><td colspan="7"><div class="empty-state"><span>💧</span><strong>No enquiries found</strong><p>New website enquiries will appear here automatically.</p></div></td></tr>{% endfor %}
   </tbody></table></div>
 </section>
 {% endblock %}

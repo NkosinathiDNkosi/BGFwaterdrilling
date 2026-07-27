@@ -295,7 +295,7 @@
   </section>
 
   <!-- APPOINTMENT-FOCUSED CTA -->
-  <section class="contact-section">
+  <section class="section contact">
     <div class="contact-bg" aria-hidden="true"></div>
     <div class="container contact-grid">
       <div class="contact-copy reveal">
@@ -313,7 +313,8 @@
         <div class="form-heading"><span>FREE SITE SURVEY</span><h3>Request an appointment</h3><p>Complete the form and we will call you back.</p></div>
         {% with messages = get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
         <div class="form-row"><label>Full name<input name="full_name" required placeholder="Your full name"></label><label>Phone number<input name="phone" required placeholder="e.g. 081 802 1758"></label></div>
-        <div class="form-row"><label>Property location<input name="location" required placeholder="Town or area"></label><label>Email address<input name="email" type="email" placeholder="Optional"></label></div>
+        <div class="form-row"><label>Home Address<input name="location" required autocomplete="street-address" placeholder="Street address, town or area"></label><label>Email address<input name="email" type="email" autocomplete="email" placeholder="Optional"></label></div>
+        <label>Estimated date to drill<select name="preferred_drilling_date" required><option value="">Choose an available date</option>{% for drilling_date in available_dates %}<option value="{{ drilling_date.value }}">{{ drilling_date.label }}</option>{% endfor %}</select><small class="field-help">Only currently available dates are shown. One drilling appointment is accepted per day.</small></label>
         <label>Service required<select name="service" required><option value="">Choose a service</option>{% for service in services %}<option>{{ service }}</option>{% endfor %}</select></label>
         <label>Tell us about the property<textarea name="message" rows="4" placeholder="Home, farm, business, preferred depth or any questions..."></textarea></label>
         <button class="btn btn-primary full" type="submit">Secure my free survey <i class="fa-solid fa-arrow-right"></i></button>

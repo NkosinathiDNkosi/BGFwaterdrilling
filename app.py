@@ -3,7 +3,7 @@
 import os
 import re
 import sqlite3
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from functools import wraps
 
 from flask import (
@@ -76,11 +76,32 @@ def init_db():
             phone TEXT NOT NULL,
             email TEXT,
             location TEXT NOT NULL,
+            preferred_drilling_date TEXT,
             service TEXT NOT NULL,
             message TEXT,
             status TEXT NOT NULL DEFAULT 'New',
             created_at TEXT NOT NULL
         )
+        """
+    )
+
+    # Safely upgrade databases created by an earlier version of the website.
+    columns = {
+        row[1] for row in cursor.execute("PRAGMA table_info(enquiries)").fetchall()
+    }
+    if "preferred_drilling_date" not in columns:
+        cursor.execute(
+            "ALTER TABLE enquiries ADD COLUMN preferred_drilling_date TEXT"
+        )
+
+    # SQLite allows multiple NULL values, so old enquiries remain valid while
+    # every newly selected drilling date is protected against double-booking.
+    cursor.execute(
+        """
+        CREATE UNIQUE INDEX IF NOT EXISTS
+            unique_enquiry_drilling_date
+        ON enquiries(preferred_drilling_date)
+        WHERE preferred_drilling_date IS NOT NULL
         """
     )
 
@@ -138,6 +159,38 @@ def valid_phone(phone):
     return bool(re.fullmatch(r"(?:\+27|0)\d{9}", cleaned))
 
 
+def get_available_drilling_dates(days=90):
+    """Return unbooked dates from tomorrow through the requested date window."""
+    today = date.today()
+    last_day = today + timedelta(days=days)
+    connection = get_db_connection()
+    booked_dates = {
+        row["preferred_drilling_date"]
+        for row in connection.execute(
+            """
+            SELECT preferred_drilling_date
+            FROM enquiries
+            WHERE preferred_drilling_date IS NOT NULL
+            """
+        ).fetchall()
+    }
+    connection.close()
+
+    available_dates = []
+    current_day = today + timedelta(days=1)
+    while current_day <= last_day:
+        iso_date = current_day.isoformat()
+        if iso_date not in booked_dates:
+            available_dates.append(
+                {
+                    "value": iso_date,
+                    "label": current_day.strftime("%A, %d %B %Y"),
+                }
+            )
+        current_day += timedelta(days=1)
+    return available_dates
+
+
 def login_required(view_function):
     """Protect dashboard routes from unauthenticated visitors."""
 
@@ -160,6 +213,7 @@ def index():
     response = make_response(render_template(
         "index.html",
         services=SERVICES,
+        available_dates=get_available_drilling_dates(),
         year=datetime.now().year,
     ))
     response.headers["Cache-Control"] = "public, max-age=300, stale-while-revalidate=600"
@@ -173,37 +227,87 @@ def submit_enquiry():
     phone = request.form.get("phone", "").strip()
     email = request.form.get("email", "").strip()
     location = request.form.get("location", "").strip()
+    preferred_drilling_date = request.form.get(
+        "preferred_drilling_date", ""
+    ).strip()
     service = request.form.get("service", "").strip()
     message = request.form.get("message", "").strip()
 
     if len(full_name) < 2 or not valid_phone(phone) or not location:
-        flash("Please enter your name, location and a valid South African phone number.", "error")
+        flash("Please enter your name, home address and a valid South African phone number.", "error")
+        return redirect(url_for("index", _anchor="contact"))
+
+    try:
+        requested_date = date.fromisoformat(preferred_drilling_date)
+    except ValueError:
+        requested_date = None
+
+    first_available_day = date.today() + timedelta(days=1)
+    last_available_day = date.today() + timedelta(days=90)
+    if (
+        requested_date is None
+        or requested_date < first_available_day
+        or requested_date > last_available_day
+    ):
+        flash("Please choose one of the available drilling dates.", "error")
         return redirect(url_for("index", _anchor="contact"))
 
     if service not in SERVICES:
         service = "General Enquiry"
 
     connection = get_db_connection()
-    connection.execute(
-        """
-        INSERT INTO enquiries
-            (full_name, phone, email, location, service, message, status, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, 'New', ?)
-        """,
-        (
-            full_name,
-            phone,
-            email,
-            location,
-            service,
-            message,
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        ),
-    )
-    connection.commit()
-    connection.close()
+    try:
+        # BEGIN IMMEDIATE serialises competing writes. The unique index remains
+        # the final safeguard if two visitors submit the same date together.
+        connection.execute("BEGIN IMMEDIATE")
+        already_booked = connection.execute(
+            """
+            SELECT id FROM enquiries
+            WHERE preferred_drilling_date = ?
+            """,
+            (preferred_drilling_date,),
+        ).fetchone()
+        if already_booked:
+            connection.rollback()
+            flash(
+                "That drilling date has just been booked. Please select another available date.",
+                "error",
+            )
+            return redirect(url_for("index", _anchor="contact"))
 
-    flash("Thank you. Our team will contact you shortly to discuss your site.", "success")
+        connection.execute(
+            """
+            INSERT INTO enquiries
+                (full_name, phone, email, location, preferred_drilling_date,
+                 service, message, status, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'New', ?)
+            """,
+            (
+                full_name,
+                phone,
+                email,
+                location,
+                preferred_drilling_date,
+                service,
+                message,
+                datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            ),
+        )
+        connection.commit()
+    except sqlite3.IntegrityError:
+        connection.rollback()
+        flash(
+            "That drilling date has just been booked. Please select another available date.",
+            "error",
+        )
+        return redirect(url_for("index", _anchor="contact"))
+    finally:
+        connection.close()
+
+    flash(
+        "Thank you. Your preferred drilling date has been reserved and our team will contact you shortly.",
+        "success",
+    )
     return redirect(url_for("index", _anchor="contact"))
 
 
@@ -310,7 +414,7 @@ def sitemap_xml():
     content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://bgfwaterdrilling.co.za/</loc>
+    <loc>https://burgersfortwaterdrilling.co.za/</loc>
     <lastmod>{today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>

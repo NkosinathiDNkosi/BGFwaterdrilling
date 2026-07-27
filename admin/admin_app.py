@@ -44,6 +44,7 @@ def ensure_schema() -> None:
                 phone TEXT NOT NULL,
                 email TEXT,
                 location TEXT NOT NULL,
+                preferred_drilling_date TEXT,
                 service TEXT NOT NULL,
                 message TEXT,
                 status TEXT NOT NULL DEFAULT 'New',
@@ -54,6 +55,13 @@ def ensure_schema() -> None:
         columns = {row[1] for row in connection.execute("PRAGMA table_info(enquiries)")}
         if "is_deleted" not in columns:
             connection.execute("ALTER TABLE enquiries ADD COLUMN is_deleted INTEGER NOT NULL DEFAULT 0")
+        if "preferred_drilling_date" not in columns:
+            connection.execute("ALTER TABLE enquiries ADD COLUMN preferred_drilling_date TEXT")
+        connection.execute("""
+            CREATE UNIQUE INDEX IF NOT EXISTS unique_enquiry_drilling_date
+            ON enquiries(preferred_drilling_date)
+            WHERE preferred_drilling_date IS NOT NULL
+        """)
 
         connection.execute("""
             CREATE TABLE IF NOT EXISTS admins (
@@ -269,9 +277,9 @@ def export_csv():
         ).fetchall()
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow(["ID", "Name", "Phone", "Email", "Location", "Service", "Message", "Status", "Created"])
+    writer.writerow(["ID", "Name", "Phone", "Email", "Home Address", "Estimated Drilling Date", "Service", "Message", "Status", "Created"])
     for row in rows:
-        writer.writerow([row["id"], row["full_name"], row["phone"], row["email"], row["location"], row["service"], row["message"], row["status"], row["created_at"]])
+        writer.writerow([row["id"], row["full_name"], row["phone"], row["email"], row["location"], row["preferred_drilling_date"], row["service"], row["message"], row["status"], row["created_at"]])
     return Response(output.getvalue(), mimetype="text/csv", headers={
         "Content-Disposition": "attachment; filename=burgersfort-water-drilling-enquiries.csv"
     })
