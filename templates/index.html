@@ -1,9 +1,27 @@
 {% extends "base.html" %}
-{% block title %}Borehole Drilling Burgersfort | Free Site Survey{% endblock %}
-{% block meta_description %}Professional borehole drilling, pump installation, PVC casing and complete water systems in Burgersfort, Steelpoort and surrounding Limpopo areas. Request a free site survey.{% endblock %}
+{% block title %}Borehole Drilling in Burgersfort | Burgersfort Water Drilling{% endblock %}
+{% block meta_description %}Borehole drilling in Burgersfort, Limpopo. Site surveys, PVC casing, pump installation and complete water systems for homes, farms and businesses. Request a survey.{% endblock %}
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Is the site survey really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. We offer a free site survey and free local transport within our operating area. We will confirm availability when we contact you."}},
+    {"@type": "Question", "name": "How deep will my borehole need to be?", "acceptedAnswer": {"@type": "Answer", "text": "Depth depends on the site and underground conditions. Our team will discuss site conditions and expected depth with you before work begins. Actual depth depends on underground conditions."}},
+    {"@type": "Question", "name": "Does the package include a JoJo tank?", "acceptedAnswer": {"@type": "Answer", "text": "Tank supply and integration can be included where required. We will discuss the right storage capacity for your property and water needs."}},
+    {"@type": "Question", "name": "Can I pay in instalments?", "acceptedAnswer": {"@type": "Answer", "text": "A three-month instalment arrangement may be available. Contact our team to confirm the current terms and eligibility before work starts."}},
+    {"@type": "Question", "name": "What can change the final price?", "acceptedAnswer": {"@type": "Answer", "text": "Depth, ground stability, extra steel casing, cable length, pump size and storage requirements may affect the final quotation."}}
+  ]
+}
+</script>
+{% endblock %}
+
 {% block body %}
+{% from "macros.html" import svg_icon %}
+
 <!-- PAGE MAP: Navigation → Hero → About → Services → Process → Pricing →
-     Gallery → Testimonials → FAQ → Contact → Footer. Search these labels. -->
+     Work Gallery → Expectations → FAQ → Contact → Owner → Find Us → Footer. -->
 
 <!-- NAVIGATION: link href values must match the section IDs below. -->
 <header class="site-header" id="site-header">
@@ -14,64 +32,68 @@
     </a>
 
     <nav class="desktop-nav" aria-label="Main navigation">
-      <a href="#about">About</a>
       <a href="#services">Services</a>
-      <a href="#process">Process</a>
+      <a href="#gallery">Our work</a>
       <a href="#pricing">Pricing</a>
-      <a href="#gallery">Gallery</a>
+      <a href="#faq">FAQs</a>
       <a href="#contact">Contact</a>
     </nav>
 
-    <a class="nav-cta" href="#contact">Secure a survey <i class="fa-solid fa-arrow-right"></i></a>
+    <a class="nav-cta" href="#contact">Request a free site survey {{ svg_icon('arrow-right') }}</a>
     <button class="menu-button" id="menu-button" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-nav">
       <span></span><span></span><span></span>
     </button>
   </div>
   <div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
   <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" aria-hidden="true">
-    <a href="#about">About</a><a href="#services">Services</a><a href="#process">Process</a>
-    <a href="#pricing">Pricing</a><a href="#gallery">Gallery</a><a href="#contact">Secure a survey</a>
+    <a href="#services">Services</a>
+    <a href="#gallery">Our work</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQs</a>
+    <a href="#contact">Request a free site survey</a>
   </nav>
 </header>
 
 <main>
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <!-- Static hero photograph with a lightweight burst-aligned screen splash. -->
-    <div class="hero-bg" aria-hidden="true">
-      <img id="hero-photo" class="hero-photo" src="{{ url_for('static', filename='hero-drilling.webp') }}" alt="Borehole drilling operation in Burgersfort, Limpopo" width="1408" height="768" fetchpriority="high" decoding="async">
-      <div class="screen-splash" id="screen-splash">
-        <span class="splash-core"></span>
-        <span class="splash-ring"></span>
-        <span class="splash-mist"></span>
-        <span class="splash-drop d1"></span>
-        <span class="splash-drop d2"></span>
-        <span class="splash-drop d3"></span>
-        <span class="splash-drop d4"></span>
-        <span class="splash-drop d5"></span>
-        <span class="splash-drop d6"></span>
-      </div>
+  <!-- HERO: clear service promise paired with a framed image of real project work. -->
+  <section class="hero hero-redesign" id="home">
+    <div class="hero-art" aria-hidden="true">
+      <span class="hero-art-ring hero-art-ring-one"></span>
+      <span class="hero-art-ring hero-art-ring-two"></span>
+      <span class="hero-art-cross"></span>
     </div>
-    <div class="hero-shade" aria-hidden="true"></div>
-    <div class="hero-glow" aria-hidden="true"></div>
     <div class="container hero-grid">
       <div class="hero-copy reveal">
-        <img class="hero-brand" src="{{ url_for('static', filename='image14.jpeg') }}" alt="Burgersfort Water Drilling">
-        <div class="eyebrow"><span></span> Borehole specialists in Burgersfort & surrounding areas</div>
-        <h1>Borehole drilling<br><em>built for reliable water.</em></h1>
-        <p>From the first site assessment to pumps, casing and storage, one local team coordinates your complete water system across Burgersfort and surrounding Limpopo areas.</p>
+        <div class="eyebrow"><span></span> Borehole drilling in Burgersfort, Limpopo</div>
+        <h1><span class="hero-title-main">Water you can count on.</span><span class="hero-title-accent">From the ground up.</span></h1>
+        <p>From site assessment and drilling to casing, pumps and storage, we help homes, farms and businesses plan a dependable water system with one local team.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary magnetic" href="#contact">Book a free site survey <i class="fa-solid fa-arrow-right"></i></a>
-          <a class="btn btn-ghost" href="tel:+27818021758"><i class="fa-solid fa-phone"></i> 0818021758</a>
+          <a class="btn btn-primary" href="#contact">Request a free site survey {{ svg_icon('arrow-right') }}</a>
+          <a class="btn btn-ghost" href="tel:+27818021758">{{ svg_icon('phone') }} <span>081 802 1758</span></a>
         </div>
-        <div class="hero-proof">
-          <span><i class="fa-solid fa-location-dot"></i> Local Limpopo team</span>
-          <span><i class="fa-solid fa-shield-halved"></i> Complete installations</span>
-          <span><i class="fa-solid fa-headset"></i> Direct support</span>
+        <div class="hero-proof" aria-label="Service highlights">
+          <div class="hero-proof-item">
+            <span class="hero-proof-icon">{{ svg_icon('layers') }}</span>
+            <span class="hero-proof-copy"><strong>Complete installations</strong><small>One coordinated team</small></span>
+          </div>
+          <div class="hero-proof-item">
+            <span class="hero-proof-icon">{{ svg_icon('messages-square') }}</span>
+            <span class="hero-proof-copy"><strong>Direct support</strong><small>Real people, clear updates</small></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-media reveal delay-1">
+        <div class="hero-image-backplate" aria-hidden="true"></div>
+        <div class="hero-media-frame">
+          <img id="hero-photo" class="hero-photo" src="{{ url_for('static', filename='work/project-04.webp') }}" alt="Borehole drilling truck working on a site in Limpopo" width="1280" height="960" fetchpriority="high" decoding="async">
+          <div class="hero-image-caption">
+            <span class="hero-caption-icon">{{ svg_icon('map-pin') }}</span>
+            <span><strong>Real work. Local expertise.</strong><small>Burgersfort, Limpopo</small></span>
+          </div>
         </div>
       </div>
     </div>
-    <div class="scroll-cue" aria-hidden="true"><span></span> Explore</div>
   </section>
 
   <!-- BENEFIT STRIP -->
@@ -86,19 +108,19 @@
   <section class="section about" id="about">
     <div class="container about-grid">
       <div class="about-media reveal">
-        <img src="{{ url_for('static', filename='about-premium.webp') }}" alt="Burgersfort Water Drilling equipment on site" width="1400" height="1000" loading="lazy" decoding="async">
+        <img src="{{ url_for('static', filename='work/project-08.webp') }}" alt="Burgersfort Water Drilling equipment on site" width="1280" height="960" loading="lazy" decoding="async">
         <div class="experience-badge"><strong>LOCAL</strong><span>Professional drilling team</span></div>
       </div>
       <div class="about-copy reveal delay-1">
-        <span class="section-kicker">01 — About us</span>
+        <span class="section-kicker">About us</span>
         <h2>Water independence,<br><em>delivered properly.</em></h2>
         <p class="lead">A borehole is more than a drilling job. It is a long-term property investment that deserves planning, reliable equipment and one accountable team.</p>
         <p>We coordinate every stage—from site assessment and drilling to PVC casing, pump installation, storage and commissioning.</p>
         <div class="reason-grid">
-          <div><i class="fa-solid fa-compass-drafting"></i><strong>Clear planning</strong><span>Every project starts with a site assessment.</span></div>
-          <div><i class="fa-solid fa-layer-group"></i><strong>Complete systems</strong><span>Drilling, casing, pumps and storage.</span></div>
-          <div><i class="fa-solid fa-comments"></i><strong>Direct support</strong><span>Speak to a local team throughout.</span></div>
-          <div><i class="fa-solid fa-receipt"></i><strong>Transparent pricing</strong><span>Catalogue guidance before final quotation.</span></div>
+          <div>{{ svg_icon('compass') }}<strong>Clear planning</strong><span>Every project starts with a site assessment.</span></div>
+          <div>{{ svg_icon('layers') }}<strong>Complete systems</strong><span>Drilling, casing, pumps and storage.</span></div>
+          <div>{{ svg_icon('messages-square') }}<strong>Direct support</strong><span>Speak to a local team throughout.</span></div>
+          <div>{{ svg_icon('receipt') }}<strong>Transparent pricing</strong><span>Catalogue guidance before final quotation.</span></div>
         </div>
       </div>
     </div>
@@ -108,7 +130,7 @@
   <section class="section services" id="services">
     <div class="container">
       <div class="section-heading reveal">
-        <div><span class="section-kicker">02 — Our services</span><h2>A complete water system,<br><em>from ground to tap.</em></h2></div>
+        <div><span class="section-kicker">What we do</span><h2>A complete water system,<br><em>from ground to tap.</em></h2></div>
         <p>Choose an individual service or allow us to coordinate the full borehole installation.</p>
       </div>
 
@@ -121,7 +143,7 @@
         ] %}
         <article class="service-card image-card reveal">
           <img src="{{ url_for('static', filename=image) }}" alt="{{ title }} by Burgersfort Water Drilling" width="1200" height="800" loading="lazy" decoding="async">
-          <div class="service-card-body"><h3>{{ title }}</h3><p>{{ copy }}</p><a href="#contact">Enquire <i class="fa-solid fa-arrow-right"></i></a></div>
+          <div class="service-card-body"><h3>{{ title }}</h3><p>{{ copy }}</p><a href="#contact">Enquire {{ svg_icon('arrow-right') }}</a></div>
         </article>
         {% endfor %}
       </div>
@@ -132,20 +154,23 @@
   <section class="section process" id="process">
     <div class="container">
       <div class="section-heading centered reveal">
-        <span class="section-kicker">03 — The borehole journey</span>
-        <h2>Six clear steps to<br><em>strong water flow.</em></h2>
+        <span class="section-kicker">Our approach</span>
+        <h2>From the first survey to<br><em>reliable water flow.</em></h2>
       </div>
-      <div class="process-line" aria-hidden="true"></div>
       <div class="process-grid">
-        {% for number,icon,title,copy in [
-          ('01','fa-location-crosshairs','Survey','We assess access, conditions and expected demand.'),
-          ('02','fa-bore-hole','Drilling','The borehole is drilled to the suitable depth.'),
-          ('03','fa-circle-notch','PVC','The hole is supported and protected with casing.'),
-          ('04','fa-gears','Pump','A suitable pump and control system are installed.'),
-          ('05','fa-database','JoJo tank','Storage and delivery are connected where required.'),
-          ('06','fa-droplet','Water','The completed system is commissioned for use.')
+        {% for icon,title,copy in [
+          ('crosshair','Site survey','We assess access, site conditions and the property’s water needs.'),
+          ('drill','Borehole drilling','The borehole is drilled to a depth suited to the site.'),
+          ('layers','PVC casing','Casing supports and protects the borehole structure.'),
+          ('settings','Pump installation','A suitable pump and control system are installed.'),
+          ('database','Water storage','Storage and delivery are connected where required.'),
+          ('droplet','System handover','The completed system is checked and prepared for use.')
         ] %}
-        <article class="process-card reveal"><span>{{ number }}</span><div class="process-icon"><i class="fa-solid {{ icon }}"></i></div><h3>{{ title }}</h3><p>{{ copy }}</p></article>
+        <article class="process-card reveal">
+          <div class="process-icon">{{ svg_icon(icon) }}</div>
+          <h3>{{ title }}</h3>
+          <p>{{ copy }}</p>
+        </article>
         {% endfor %}
       </div>
     </div>
@@ -155,14 +180,14 @@
   <section class="section pricing" id="pricing">
     <div class="container pricing-grid">
       <div class="pricing-copy reveal">
-        <span class="section-kicker">04 — Pricing guidance</span>
+        <span class="section-kicker">Pricing guidance</span>
         <h2>Plan your project<br><em>with confidence.</em></h2>
         <p>Use the calculator for an indicative package estimate. Ground conditions, steel casing, cable and tank requirements can affect the final quotation.</p>
-        <div class="price-benefits"><span><i class="fa-solid fa-check"></i> Free survey</span><span><i class="fa-solid fa-check"></i> Free local transport</span><span><i class="fa-solid fa-check"></i> Instalment option</span></div>
+        <div class="price-benefits"><span>{{ svg_icon('check') }} Free survey</span><span>{{ svg_icon('check') }} Free local transport</span><span>{{ svg_icon('check') }} Instalment option</span></div>
       </div>
 
       <div class="calculator reveal delay-1">
-        <div class="calculator-header"><div><span>PACKAGE CALCULATOR</span><small>Catalogue estimate</small></div><i class="fa-solid fa-calculator"></i></div>
+        <div class="calculator-header"><div><span>PACKAGE CALCULATOR</span><small>Catalogue estimate</small></div>{{ svg_icon('calculator') }}</div>
         <label class="field-label">Estimated drilling depth
           <select id="depth-select">{% for d in range(30,101,5) %}<option value="{{ d }}" {% if d == 50 %}selected{% endif %}>{{ d }} metres</option>{% endfor %}</select>
         </label>
@@ -171,91 +196,63 @@
           <label><input id="include-pump" type="checkbox" checked><span></span> Include pump</label>
         </div>
         <div class="estimate-box" aria-live="polite"><small>Estimated package</small><strong id="calculator-total">R35 000</strong><p id="calculator-breakdown">Drilling R15 000 + PVC R8 500 + Pump R11 500</p></div>
-        <a id="calculator-whatsapp" class="btn btn-primary full" href="#">Request this package <i class="fa-brands fa-whatsapp"></i></a>
+        <a id="calculator-whatsapp" class="btn btn-primary full" href="https://wa.me/27818021758?text=Hello%20Burgersfort%20Water%20Drilling%2C%20I%20would%20like%20a%20free%20site%20survey%20and%20an%20estimate%20for%20a%2050%20metre%20borehole%20package%20including%20PVC%20casing%20and%20a%20pump.%20Indicative%20component%20total%3A%20R35%20000." target="_blank" rel="noopener noreferrer">Request a free site survey {{ svg_icon('whatsapp') }}</a>
       </div>
     </div>
   </section>
 
-  <!-- GALLERY -->
+  <!-- GALLERY: real project photographs and all six locally hosted videos -->
   <section class="section gallery" id="gallery">
     <div class="container">
-      <div class="section-heading light reveal"><div><span class="section-kicker">05 — Recent work</span><h2>Real equipment.<br><em>Real local projects.</em></h2></div><p>Explore our drilling operations, surveying equipment and installations.</p></div>
-      <div class="recent-work-showcase">
-        <article class="media-showcase reel-showcase reveal" data-slideshow data-delay="14000">
-          <header class="media-showcase-head">
-            <div><span>Facebook reels</span><strong>Work in motion</strong></div>
-            <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
-          </header>
-          <div class="reel-stage">
-            <div class="reel-slide is-active" data-slide>
-              <iframe
-                src="https://www.facebook.com/plugins/video.php?height=476&amp;href=https%3A%2F%2Fwww.facebook.com%2Freel%2F943841922058842%2F&amp;show_text=false&amp;width=267&amp;t=0&amp;autoplay=true&amp;mute=true"
-                title="Featured Burgersfort Water Drilling project video"
-                width="267"
-                height="476"
-                scrolling="no"
-                frameborder="0"
-                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                allowfullscreen
-                loading="eager"
-              ></iframe>
-              <div class="media-caption"><span>01</span><strong>Featured drilling project</strong></div>
-            </div>
-            <div class="reel-slide" data-slide>
-              <iframe
-                src="https://www.facebook.com/plugins/video.php?height=476&amp;href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1297033765842242%2F&amp;show_text=false&amp;width=267&amp;t=0&amp;autoplay=true&amp;mute=true"
-                title="Recent Burgersfort Water Drilling project video"
-                width="267"
-                height="476"
-                scrolling="no"
-                frameborder="0"
-                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                allowfullscreen
-                loading="lazy"
-              ></iframe>
-              <div class="media-caption"><span>02</span><strong>Recent drilling project</strong></div>
-            </div>
-            <div class="reel-slide" data-slide>
-              <iframe
-                src="https://www.facebook.com/plugins/video.php?height=476&amp;href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1024627963677860%2F&amp;show_text=false&amp;width=267&amp;t=0&amp;autoplay=true&amp;mute=true"
-                title="Recent Burgersfort Water Drilling installation video"
-                width="267"
-                height="476"
-                scrolling="no"
-                frameborder="0"
-                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                allowfullscreen
-                loading="lazy"
-              ></iframe>
-              <div class="media-caption"><span>03</span><strong>Recent installation</strong></div>
-            </div>
-          </div>
-          <div class="slideshow-controls">
-            <button type="button" data-slide-prev aria-label="Previous Facebook reel"><i class="fa-solid fa-arrow-left"></i></button>
-            <div class="slideshow-dots" data-slide-dots aria-label="Facebook reel selection"></div>
-            <button type="button" data-slide-next aria-label="Next Facebook reel"><i class="fa-solid fa-arrow-right"></i></button>
-          </div>
-        </article>
+      <div class="section-heading light reveal">
+        <div><span class="section-kicker">Our work</span><h2>Real projects.<br><em>Real drilling work.</em></h2></div>
+        <p>A look at the rigs, vehicles, equipment and field work behind Burgersfort Water Drilling.</p>
+      </div>
 
-        <article class="media-showcase project-showcase reveal delay-1" data-slideshow data-delay="5200">
-          <header class="media-showcase-head">
-            <div><span>Project gallery</span><strong>From site to water</strong></div>
-            <i class="fa-solid fa-camera" aria-hidden="true"></i>
-          </header>
-          <div class="project-stage">
-            {% for image,label in [('gallery-active-drilling.webp','Active drilling'),('gallery-mobile-unit.webp','Mobile drilling unit'),('gallery-operations.webp','Site operations'),('gallery-setup.webp','Project setup'),('gallery-survey.webp','Water survey'),('gallery-preparation.webp','System preparation')] %}
-            <button class="project-slide {{ 'is-active' if loop.first }}" type="button" data-slide data-lightbox="{{ url_for('static', filename=image) }}" aria-label="Open {{ label }} image">
-              <img src="{{ url_for('static', filename=image) }}" alt="{{ label }} in Limpopo" width="1200" height="850" loading="lazy" decoding="async">
-              <div class="media-caption"><span>0{{ loop.index }}</span><strong>{{ label }}</strong><i class="fa-solid fa-expand"></i></div>
-            </button>
-            {% endfor %}
+      <div class="work-photo-grid" aria-label="Burgersfort Water Drilling project photographs">
+        {% for image,label in [
+          ('project-01.webp','Drilling truck at a project site'),
+          ('project-02.webp','Heavy-duty drilling vehicle'),
+          ('project-03.webp','Drilling rig on location'),
+          ('project-04.webp','Field team and rig setup'),
+          ('project-05.webp','Pipe preparation at the site'),
+          ('project-06.webp','Transporting pipe supplies'),
+          ('project-07.webp','Equipment arriving on site'),
+          ('project-08.webp','Drilling operation in progress'),
+          ('project-09.webp','Residential drilling setup'),
+          ('project-10.webp','Project equipment on location')
+        ] %}
+        <button class="work-photo-card reveal" type="button" data-lightbox="{{ url_for('static', filename='work/' ~ image) }}" aria-label="View larger photograph: {{ label }}">
+          <img src="{{ url_for('static', filename='work/' ~ image) }}" alt="{{ label }} — Burgersfort Water Drilling" loading="lazy" decoding="async" width="1280" height="960">
+          <span class="work-photo-caption"><strong>{{ label }}</strong>{{ svg_icon('external-link') }}</span>
+        </button>
+        {% endfor %}
+      </div>
+
+      <div class="video-gallery-heading reveal">
+        <span class="section-kicker">Work in motion</span>
+        <h3>See the work for yourself.</h3>
+        <p>Choose any clip to play it. Watch the equipment, team and drilling work on site.</p>
+      </div>
+      <div class="work-video-grid" aria-label="Burgersfort Water Drilling project videos">
+        {% for video,poster,label in [
+          ('work-video-01.mp4','work-video-01-poster.jpg','Borehole pipe preparation'),
+          ('work-video-02.mp4','work-video-02-poster.jpg','Drilling operations on site'),
+          ('work-video-03.mp4','work-video-03-poster.jpg','Rig working at the borehole'),
+          ('work-video-04.mp4','work-video-04-poster.jpg','Preparing the drilling area'),
+          ('work-video-05.mp4','work-video-05-poster.jpg','Night drilling operation'),
+          ('work-video-06.mp4','work-video-06-poster.jpg','Close-up of drilling work')
+        ] %}
+        <article class="work-video-card reveal">
+          <div class="work-video-frame">
+            <video controls playsinline preload="none" poster="{{ url_for('static', filename='work/' ~ poster) }}" aria-label="{{ label }}">
+              <source src="{{ url_for('static', filename='work/' ~ video) }}" type="video/mp4">
+              Your browser does not support HTML video. Please try a current version of Chrome, Safari or Firefox.
+            </video>
           </div>
-          <div class="slideshow-controls">
-            <button type="button" data-slide-prev aria-label="Previous project image"><i class="fa-solid fa-arrow-left"></i></button>
-            <div class="slideshow-dots" data-slide-dots aria-label="Project image selection"></div>
-            <button type="button" data-slide-next aria-label="Next project image"><i class="fa-solid fa-arrow-right"></i></button>
-          </div>
+          <div class="work-video-caption"><strong>{{ label }}</strong></div>
         </article>
+        {% endfor %}
       </div>
     </div>
   </section>
@@ -263,11 +260,11 @@
   <!-- TRUST PROMISES — factual content until verified reviews are available -->
   <section class="section testimonials" id="testimonials">
     <div class="container">
-      <div class="section-heading reveal"><div><span class="section-kicker">06 — What to expect</span><h2>Clear communication.<br><em>One accountable team.</em></h2></div><p>A straightforward process from your first enquiry to the completed water system.</p></div>
+      <div class="section-heading reveal"><div><span class="section-kicker">The experience</span><h2>Clear communication.<br><em>One accountable team.</em></h2></div><p>A straightforward process from your first enquiry to the completed water system.</p></div>
       <div class="testimonial-grid">
-        <article class="testimonial-card promise-card reveal"><i class="fa-solid fa-map-location-dot"></i><strong>Site-specific guidance</strong><p>Your quote is shaped around access, expected depth, ground conditions and water needs.</p></article>
-        <article class="testimonial-card promise-card reveal"><i class="fa-solid fa-file-invoice-dollar"></i><strong>Transparent quotation</strong><p>Understand the drilling, casing, pump and storage components before work begins.</p></article>
-        <article class="testimonial-card promise-card reveal"><i class="fa-solid fa-screwdriver-wrench"></i><strong>Complete installation</strong><p>Coordinate the essential components through one local water-system team.</p></article>
+        <article class="testimonial-card promise-card reveal">{{ svg_icon('map-pinned') }}<strong>Site-specific guidance</strong><p>Your quote is shaped around access, expected depth, ground conditions and water needs.</p></article>
+        <article class="testimonial-card promise-card reveal">{{ svg_icon('receipt') }}<strong>Transparent quotation</strong><p>Understand the drilling, casing, pump and storage components before work begins.</p></article>
+        <article class="testimonial-card promise-card reveal">{{ svg_icon('wrench') }}<strong>Complete installation</strong><p>Coordinate the essential components through one local water-system team.</p></article>
       </div>
     </div>
   </section>
@@ -275,16 +272,19 @@
   <!-- FAQ + SEO SERVICE AREAS -->
   <section class="section faq" id="faq">
     <div class="container faq-grid">
-      <div class="faq-intro reveal"><span class="section-kicker">07 — Frequently asked</span><h2>Before you<br><em>book your survey.</em></h2><p>Clear answers help you make a better decision before work begins.</p></div>
+      <div class="faq-intro reveal"><span class="section-kicker">Frequently asked questions</span><h2>Before you<br><em>book your survey.</em></h2><p>Clear answers help you make a better decision before work begins.</p></div>
       <div class="faq-list reveal delay-1">
         {% for q,a in [
-          ('Is the site survey really free?','Yes. The business advertises a free survey and free local transport within its operating area. Confirm availability when booking.'),
-          ('How deep will my borehole need to be?','Depth depends on the site and underground conditions. The survey and drilling process help determine the appropriate depth.'),
-          ('Does the package include a JoJo tank?','Tank supply and integration can be added to the system. The final package is configured around your property and water needs.'),
-          ('Can I pay in instalments?','The company advertises a three-month instalment option. The payment arrangement should be confirmed directly before work starts.'),
+          ('Is the site survey really free?','Yes. We offer a free site survey and free local transport within our operating area. We will confirm availability when we contact you.'),
+          ('How deep will my borehole need to be?','Depth depends on the site and underground conditions. Our team will discuss site conditions and expected depth with you before work begins. Actual depth depends on underground conditions.'),
+          ('Does the package include a JoJo tank?','Tank supply and integration can be included where required. We will discuss the right storage capacity for your property and water needs.'),
+          ('Can I pay in instalments?','A three-month instalment arrangement may be available. Contact our team to confirm the current terms and eligibility before work starts.'),
           ('What can change the final price?','Depth, ground stability, extra steel casing, cable length, pump size and storage requirements may affect the final quotation.')
         ] %}
-        <article class="faq-item"><button type="button"><span>{{ q }}</span><i class="fa-solid fa-plus"></i></button><div><p>{{ a }}</p></div></article>
+        <article class="faq-item">
+          <button id="faq-question-{{ loop.index }}" type="button" aria-expanded="false" aria-controls="faq-answer-{{ loop.index }}"><span>{{ q }}</span>{{ svg_icon('plus') }}</button>
+          <div id="faq-answer-{{ loop.index }}" role="region" aria-labelledby="faq-question-{{ loop.index }}" aria-hidden="true"><p>{{ a }}</p></div>
+        </article>
         {% endfor %}
       </div>
     </div>
@@ -299,42 +299,96 @@
     <div class="contact-bg" aria-hidden="true"></div>
     <div class="container contact-grid">
       <div class="contact-copy reveal">
-        <span class="section-kicker light-kicker">08 — Secure your assessment</span>
+        <span class="section-kicker light-kicker">Start your project</span>
         <h2>Your property could have<br><em>its own water source.</em></h2>
         <p>Tell us where the property is and what you need. The team will contact you to discuss the next available survey slot.</p>
         <div class="contact-details">
-          <a href="tel:+27818021758"><i class="fa-solid fa-phone"></i><span><small>Office</small>081 802 1758</span></a>
-          <a href="https://wa.me/27818021758"><i class="fa-brands fa-whatsapp"></i><span><small>WhatsApp</small>081 802 1758</span></a>
-          <a href="mailto:burgersfortwaterdrilling@gmail.com"><i class="fa-solid fa-envelope"></i><span><small>Email</small>burgersfortwaterdrilling@gmail.com</span></a>
+          <a href="tel:+27818021758">{{ svg_icon('phone') }}<span><small>Office</small>081 802 1758</span></a>
+          <a href="https://wa.me/27818021758">{{ svg_icon('whatsapp') }}<span><small>WhatsApp</small>081 802 1758</span></a>
+          <a href="mailto:burgersfortwaterdrilling@gmail.com">{{ svg_icon('mail') }}<span><small>Email</small>burgersfortwaterdrilling@gmail.com</span></a>
         </div>
       </div>
 
       <form id="contact" class="appointment-form reveal delay-1" action="{{ url_for('submit_enquiry') }}" method="post">
-        <div class="form-heading"><span>FREE SITE SURVEY</span><h3>Request an appointment</h3><p>Complete the form and we will call you back.</p></div>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-heading"><span>FREE SITE SURVEY</span><h3>Request a free site survey</h3><p>Complete the form and we will call you back.</p></div>
         {% with messages = get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
-        <div class="form-row"><label>Full name<input name="full_name" required placeholder="Your full name"></label><label>Phone number<input name="phone" required placeholder="e.g. 081 802 1758"></label></div>
-        <div class="form-row"><label>Home Address<input name="location" required autocomplete="street-address" placeholder="Street address, town or area"></label><label>Email address<input name="email" type="email" autocomplete="email" placeholder="Optional"></label></div>
-        <label>Estimated date to drill<select name="preferred_drilling_date" required><option value="">Choose an available date</option>{% for drilling_date in available_dates %}<option value="{{ drilling_date.value }}">{{ drilling_date.label }}</option>{% endfor %}</select><small class="field-help">Only currently available dates are shown. One drilling appointment is accepted per day.</small></label>
+        <div class="form-row"><label>Full name<input name="full_name" autocomplete="name" required maxlength="120" placeholder="Your full name"></label><label>Phone number<input name="phone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="32" placeholder="e.g. 081 802 1758"></label></div>
+        <div class="form-row"><label>Property address<input name="location" required autocomplete="street-address" placeholder="Street address, town or area"></label><label>Email address<input name="email" type="email" autocomplete="email" placeholder="Optional"></label></div>
+        <label>Preferred drilling date<select name="preferred_drilling_date" required><option value="">Choose a preferred date</option>{% for drilling_date in available_dates %}<option value="{{ drilling_date.value }}">{{ drilling_date.label }}</option>{% endfor %}</select><small class="field-help">Your selection is a request, not a confirmed booking. Only confirmed appointments block a date.</small></label>
         <label>Service required<select name="service" required><option value="">Choose a service</option>{% for service in services %}<option>{{ service }}</option>{% endfor %}</select></label>
         <label>Tell us about the property<textarea name="message" rows="4" placeholder="Home, farm, business, preferred depth or any questions..."></textarea></label>
-        <button class="btn btn-primary full" type="submit">Secure my free survey <i class="fa-solid fa-arrow-right"></i></button>
-        <p class="form-note"><i class="fa-solid fa-lock"></i> Your details are used only to respond to this enquiry.</p>
+        <button class="btn btn-primary full" type="submit">Request a free site survey {{ svg_icon('arrow-right') }}</button>
+        <p class="form-note">{{ svg_icon('lock') }} Your details are used only to respond to this enquiry.</p>
       </form>
+    </div>
+  </section>
+
+  <!-- OWNER / LEADERSHIP -->
+  <section class="section director-section" id="leadership">
+    <div class="container director-grid">
+      <div class="director-mosaic reveal" aria-label="Photographs of Mokwena Gift at work">
+        <img class="director-main-photo" src="{{ url_for('static', filename='work/director-gift-mokwena.webp') }}" alt="Mokwena Gift at a drilling project" loading="lazy" decoding="async" width="1280" height="960">
+        <div class="director-supporting-photos">
+          <img src="{{ url_for('static', filename='work/director-office.webp') }}" alt="Mokwena Gift in an office setting" loading="lazy" decoding="async" width="960" height="1280">
+          <img src="{{ url_for('static', filename='work/director-site-portrait-2.webp') }}" alt="Mokwena Gift on site" loading="lazy" decoding="async" width="960" height="1280">
+        </div>
+        <span class="director-photo-stamp">{{ svg_icon('hard-hat') }} Local leadership · Limpopo</span>
+      </div>
+      <div class="director-copy reveal delay-1">
+        <span class="section-kicker">Leadership</span>
+        <p class="director-overline">Leadership behind the work</p>
+        <h2>Mokwena <em>Gift.</em></h2>
+        <p class="director-lead">The person at the helm of Burgersfort Water Drilling.</p>
+        <p>With a practical, hands-on focus, Gift leads the team delivering borehole drilling and water-system projects for homes, farms and businesses around Burgersfort and the surrounding Limpopo area.</p>
+        <div class="director-credentials">
+          <div><span>CEO</span><strong>Mokwena Gift</strong></div>
+          <div><span>Title</span><strong>Director</strong></div>
+          <div><span>Position</span><strong>Manager</strong></div>
+        </div>
+        <a class="btn btn-primary" href="#contact">Enquire with the team {{ svg_icon('arrow-right') }}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FIND US -->
+  <section class="section find-us" id="find-us">
+    <div class="container find-us-grid">
+      <div class="find-us-copy reveal">
+        <span class="section-kicker">Find us</span>
+        <h2>Local team.<br><em>On the ground.</em></h2>
+        <p>Find Burgersfort Water Drilling at Ga Madiseng in Burgersfort, Limpopo. Open the map for directions to the address below.</p>
+        <div class="find-us-details">
+          <div class="find-us-detail"><span class="find-us-icon">{{ svg_icon('map-pin') }}</span><div><small>Street address</small><strong>Stand No. 34, Ga Madiseng</strong><span>Burgersfort, 1150, Limpopo, South Africa</span></div></div>
+          <div class="find-us-detail"><span class="find-us-icon">{{ svg_icon('mail-open') }}</span><div><small>Postal address</small><strong>P.O. Box 5483</strong></div></div>
+          <div class="find-us-detail"><span class="find-us-icon">{{ svg_icon('phone') }}</span><div><small>Call the team</small><a href="tel:+27818021758">081 802 1758</a></div></div>
+        </div>
+        <a class="btn btn-primary find-us-directions" href="https://www.google.com/maps/dir/?api=1&amp;destination=-24.636205078076312%2C30.235027075363735" target="_blank" rel="noopener noreferrer">Get directions {{ svg_icon('external-link') }}</a>
+      </div>
+      <div class="find-us-map-wrap reveal delay-1">
+        <div class="find-us-map-label">{{ svg_icon('map-pinned') }}<span>Find us in Burgersfort</span></div>
+        <iframe title="Google Maps location pin for Burgersfort Water Drilling in Ga Madiseng" src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3319.6947476458313!2d30.235027075363735!3d-24.636205078076312!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjTCsDM4JzEwLjMiUyAzMMKwMTQnMTUuNCJF!5e1!3m2!1sen!2sza!4v1792191401614!5m2!1sen!2sza" width="600" height="450" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
     </div>
   </section>
 
 <footer>
   <div class="container footer-grid">
-    <div><a class="brand footer-brand" href="#home"><img class="brand-logo" src="{{ url_for('static', filename='image14.jpeg') }}" alt="Burgersfort Water Drilling logo" width="58" height="58"><span class="brand-copy"><strong>BURGERSFORT</strong><small>WATER DRILLING</small></span></a><p>Complete borehole and private-water systems across Limpopo.</p><div class="footer-socials"><a class="facebook-link" href="https://www.facebook.com/profile.php?id=61591641160093" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i> Follow on Facebook</a></div></div>
-    <div><strong>Quick links</strong><a href="#about">About</a><a href="#services">Services</a><a href="#pricing">Pricing</a><a href="#contact">Book a survey</a></div>
-    <div><strong>Office</strong><span>P.O Box 5483</span><span>Stand no.34, Ga Madiseng, Burgersfort, 1150</span><span>Reg No: 2025/467469/07</span></div>
+    <div><a class="brand footer-brand" href="#home"><img class="brand-logo" src="{{ url_for('static', filename='image14.jpeg') }}" alt="Burgersfort Water Drilling logo" width="58" height="58"><span class="brand-copy"><strong>BURGERSFORT</strong><small>WATER DRILLING</small></span></a><p>Complete borehole and private-water systems across Limpopo.</p><div class="footer-socials">
+      <a class="social-link facebook-link" aria-label="Visit Burgersfort Water Drilling on Facebook" href="https://www.facebook.com/profile.php?id=61591641160093" target="_blank" rel="noopener noreferrer">{{ svg_icon('facebook') }}<span>Facebook</span></a>
+      <a class="social-link whatsapp-link" aria-label="Contact Burgersfort Water Drilling on WhatsApp" href="https://wa.me/27818021758" target="_blank" rel="noopener noreferrer">{{ svg_icon('whatsapp') }}<span>WhatsApp</span></a>
+    </div></div>
+    <div><strong>Quick links</strong><a href="#about">About</a><a href="#services">Services</a><a href="#gallery">Our work</a><a href="#leadership">Meet the owner</a><a href="#find-us">Find us</a><a href="#contact">Request a free site survey</a></div>
+    <div><strong>Office</strong><span>P.O. Box 5483</span><span>Stand No. 34, Ga Madiseng, Burgersfort, 1150</span><span>Reg No: 2025/467469/07</span></div>
   </div>
   <div class="container footer-bottom"><span>© {{ year }} Burgersfort Water Drilling</span><a href="/admin/login">Staff access</a></div>
 </footer>
 
-<a class="floating-book" href="#contact"><i class="fa-solid fa-calendar-check"></i><span>BOOK<br>SURVEY</span></a>
-<a class="floating-facebook" href="https://www.facebook.com/profile.php?id=61591641160093" target="_blank" rel="noopener noreferrer" aria-label="Visit Burgersfort Water Drilling on Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-<a class="floating-whatsapp" href="https://wa.me/27818021758?text=Hello%20Burgersfort%20Water%20Drilling%2C%20I%20would%20like%20to%20book%20a%20free%20survey." aria-label="Chat on WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+<a class="floating-facebook" href="https://www.facebook.com/profile.php?id=61591641160093" target="_blank" rel="noopener noreferrer" aria-label="Visit Burgersfort Water Drilling on Facebook">{{ svg_icon('facebook') }}</a>
+<a class="floating-whatsapp" href="https://wa.me/27818021758?text=Hello%20Burgersfort%20Water%20Drilling%2C%20I%20would%20like%20to%20book%20a%20free%20survey." aria-label="Chat on WhatsApp">{{ svg_icon('whatsapp') }}</a>
 
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Project image"><button class="lightbox-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button><img alt="Expanded project"></div>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Expanded project photograph" aria-hidden="true" tabindex="-1">
+  <button class="lightbox-close" type="button" aria-label="Close enlarged photograph">{{ svg_icon('x') }}</button>
+  <img alt="" src="" decoding="async">
+</div>
 {% endblock %}

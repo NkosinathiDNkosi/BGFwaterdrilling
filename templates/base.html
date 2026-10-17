@@ -5,68 +5,71 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#eef8fc">
-  <meta name="description" content="{% block meta_description %}Premium borehole drilling, pump installation and complete water systems in Burgersfort, Steelpoort and surrounding Limpopo areas.{% endblock %}">
+  <meta name="description" content="{% block meta_description %}Borehole drilling in Burgersfort, Limpopo. Site surveys, PVC casing, pump installation and complete water systems for homes, farms and businesses.{% endblock %}">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="author" content="Burgersfort Water Drilling">
-  <title>{% block title %}Burgersfort Water Drilling | Premium Borehole Specialists{% endblock %}</title>
-  <link rel="canonical" href="https://burgersfortwaterdrilling.co.za/">
+  <title>{% block title %}Borehole Drilling in Burgersfort | Burgersfort Water Drilling{% endblock %}</title>
+  <link rel="canonical" href="https://bgfwaterdrilling.co.za/">
 
   <!-- Browser and device icons -->
-  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}?v=7">
-  <link rel="icon" type="image/png" sizes="48x48" href="{{ url_for('static', filename='favicon-48x48.png') }}?v=7">
-  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}?v=7">
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}?v=7">
-  <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}?v=7">
-  <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}?v=7">
-  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?v=7">
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}?v=10">
+  <link rel="icon" type="image/png" sizes="48x48" href="{{ url_for('static', filename='favicon-48x48.png') }}?v=10">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}?v=10">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}?v=10">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}?v=10">
+  <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}?v=10">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?v=10">
 
   <!-- Social sharing metadata -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Burgersfort Water Drilling">
   <meta property="og:locale" content="en_ZA">
-  <meta property="og:url" content="https://burgersfortwaterdrilling.co.za/">
-  <meta property="og:title" content="Burgersfort Water Drilling">
-  <meta property="og:description" content="Borehole drilling, pumps and complete water systems in Burgersfort, Steelpoort and surrounding Limpopo areas.">
-  <meta property="og:image" content="{{ url_for('static', filename='hero-premium.webp', _external=True) }}">
+  <meta property="og:url" content="https://bgfwaterdrilling.co.za/">
+  <meta property="og:title" content="Borehole Drilling in Burgersfort | Burgersfort Water Drilling">
+  <meta property="og:description" content="Borehole drilling, site surveys, PVC casing and pump installation across Burgersfort, Steelpoort and surrounding Limpopo areas.">
+  <meta property="og:image" content="{{ url_for('static', filename='work/project-04.webp', _external=True) }}">
   <meta property="og:image:alt" content="Burgersfort Water Drilling borehole team on site">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Burgersfort Water Drilling">
-  <meta name="twitter:description" content="Book a free borehole site survey in Burgersfort and surrounding Limpopo areas.">
-  <meta name="twitter:image" content="{{ url_for('static', filename='hero-premium.webp', _external=True) }}">
+  <meta name="twitter:title" content="Borehole Drilling in Burgersfort | Burgersfort Water Drilling">
+  <meta name="twitter:description" content="Request a borehole site survey in Burgersfort. Drilling, casing, pump installation and complete water systems across Limpopo.">
+  <meta name="twitter:image" content="{{ url_for('static', filename='work/project-04.webp', _external=True) }}">
 
-  <link rel="preload" as="image" href="{{ url_for('static', filename='hero-drilling.webp') }}" fetchpriority="high">
+  <link rel="preload" as="image" href="{{ url_for('static', filename='work/project-04.webp') }}" fetchpriority="high">
+  <link rel="preload" as="image" href="{{ url_for('static', filename='image14.jpeg') }}">
 
-  <!-- External typography and icon dependencies. -->
+  <!-- Typography only; all interface icons are self-contained inline SVGs. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- The labelled stylesheet sections follow the order of index.html. -->
-  {# Increment asset_version after CSS/JS design changes so browsers and Render
-     never combine a new template with an older cached stylesheet. #}
-  {% set asset_version = '20260723-logo-crop-nav-v5' %}
+  {# Bump asset_version after CSS/JS changes to prevent stale browser assets. #}
+  {% set asset_version = '20261017-mobile-map-sora-v12' %}
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=asset_version) }}">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "Burgersfort Water Drilling",
-    "url": "https://burgersfortwaterdrilling.co.za/",
-    "logo": "{{ url_for('static', filename='image14.jpeg', _external=True) }}",
-    "image": "{{ url_for('static', filename='hero-premium.webp', _external=True) }}",
+    "url": "https://bgfwaterdrilling.co.za/",
+    "logo": "{{ url_for('static', filename='brand-logo.webp', _external=True) }}",
+    "image": "{{ url_for('static', filename='work/project-04.webp', _external=True) }}",
     "telephone": "+27 81 802 1758",
     "email": "burgersfortwaterdrilling@gmail.com",
+    "description": "Borehole drilling, site surveys, PVC casing, pump installation and complete water systems in Burgersfort and surrounding Limpopo areas.",
+    "hasMap": "https://www.google.com/maps/?q=-24.636205078076312,30.235027075363735",
+    "knowsAbout": ["Borehole drilling", "Borehole site surveys", "PVC casing", "Borehole pump installation", "Water storage systems"],
+    "employee": {"@type": "Person", "name": "Mokwena Gift", "jobTitle": "Director"},
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Stand no. 34, Ga Madiseng",
+      "streetAddress": "Stand No. 34, Ga Madiseng",
+      "postOfficeBoxNumber": "5483",
       "addressLocality": "Burgersfort",
       "postalCode": "1150",
       "addressRegion": "Limpopo",
       "addressCountry": "ZA"
     },
     "areaServed": ["Burgersfort", "Steelpoort", "Jane Furse", "Ohrigstad", "Tubatse", "Marble Hall", "Groblersdal", "Limpopo"],
-    "sameAs": ["https://www.facebook.com/profile.php?id=61591641160093"],
-    "priceRange": "$$"
+    "sameAs": ["https://www.facebook.com/profile.php?id=61591641160093"]
   }
   </script>
   {% block extra_head %}{% endblock %}

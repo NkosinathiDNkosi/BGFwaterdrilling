@@ -1,42 +1,45 @@
-"""Burgersfort Water Drilling website and lightweight lead-management dashboard."""
+"""Burgersfort Water Drilling public website and mounted admin dashboard."""
+from __future__ import annotations
 
 import os
 import re
 import sqlite3
 from datetime import date, datetime, timedelta
-from functools import wraps
 
-from flask import (
-    Flask,
-    Response,
-    flash,
-    make_response,
-    redirect,
-    render_template,
-    request,
-    session,
-    url_for,
-)
-from werkzeug.security import check_password_hash, generate_password_hash
+from flask import Flask, Response, flash, make_response, redirect, render_template, request, url_for
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from flask_wtf import CSRFProtect
+from flask_wtf.csrf import CSRFError
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.serving import run_simple
 
-
-# -----------------------------------------------------------------------------
-# Flask configuration
-# -----------------------------------------------------------------------------
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, "bwd_enquiries.db")
+from database import get_db_connection, init_database
+from security_config import is_production, rate_limit_storage_uri, secret_key_from_env
 
 app = Flask(__name__)
-app.secret_key = os.environ.get(
-    "FLASK_SECRET_KEY",
-    os.urandom(32).hex(),
-)
+# Trust forwarded client/scheme headers only when this application is behind a
+# known reverse proxy that overwrites them. Direct/local deployments leave this off.
+if os.getenv("TRUST_PROXY_HEADERS", "").lower() == "true":
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
 app.config.update(
+    SECRET_KEY=secret_key_from_env("FLASK_SECRET_KEY"),
+    SESSION_COOKIE_NAME="bwd_public_session",
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
-    SESSION_COOKIE_SECURE=os.environ.get("FLASK_ENV") == "production",
+    SESSION_COOKIE_SECURE=is_production(),
+    PERMANENT_SESSION_LIFETIME=timedelta(hours=8),
+    MAX_CONTENT_LENGTH=64 * 1024,
+    WTF_CSRF_TIME_LIMIT=timedelta(hours=2),
+)
+csrf = CSRFProtect(app)
+limiter = Limiter(
+    key_func=get_remote_address,
+    app=app,
+    default_limits=[],
+    storage_uri=rate_limit_storage_uri(),
+    headers_enabled=True,
 )
 
 SERVICES = [
@@ -50,206 +53,119 @@ SERVICES = [
     "Maintenance & Repairs",
 ]
 
-STATUSES = ["New", "Contacted", "Quoted", "Scheduled", "Completed"]
 
-
-# -----------------------------------------------------------------------------
-# Database helpers
-# -----------------------------------------------------------------------------
-def get_db_connection():
-    """Return a SQLite connection whose rows behave like dictionaries."""
-    connection = sqlite3.connect(DB_PATH)
-    connection.row_factory = sqlite3.Row
-    return connection
-
-
-def init_db():
-    """Create the enquiry and admin tables when the app starts."""
-    connection = get_db_connection()
-    cursor = connection.cursor()
-
-    cursor.execute(
-        """
-        CREATE TABLE IF NOT EXISTS enquiries (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            full_name TEXT NOT NULL,
-            phone TEXT NOT NULL,
-            email TEXT,
-            location TEXT NOT NULL,
-            preferred_drilling_date TEXT,
-            service TEXT NOT NULL,
-            message TEXT,
-            status TEXT NOT NULL DEFAULT 'New',
-            created_at TEXT NOT NULL
-        )
-        """
-    )
-
-    # Safely upgrade databases created by an earlier version of the website.
-    columns = {
-        row[1] for row in cursor.execute("PRAGMA table_info(enquiries)").fetchall()
-    }
-    if "preferred_drilling_date" not in columns:
-        cursor.execute(
-            "ALTER TABLE enquiries ADD COLUMN preferred_drilling_date TEXT"
-        )
-
-    # SQLite allows multiple NULL values, so old enquiries remain valid while
-    # every newly selected drilling date is protected against double-booking.
-    cursor.execute(
-        """
-        CREATE UNIQUE INDEX IF NOT EXISTS
-            unique_enquiry_drilling_date
-        ON enquiries(preferred_drilling_date)
-        WHERE preferred_drilling_date IS NOT NULL
-        """
-    )
-
-    cursor.execute(
-        """
-        CREATE TABLE IF NOT EXISTS admins (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL
-        )
-        """
-    )
-
-    # Create the first admin from environment variables when none exists.
-    # Configure ADMIN_USERNAME and ADMIN_PASSWORD in Render before deployment.
-    admin_username = os.environ.get("ADMIN_USERNAME", "admin")
-    admin_password = os.environ.get("ADMIN_PASSWORD", "Admin@123")
-    admin_exists = cursor.execute(
-        "SELECT id FROM admins WHERE username = ?", (admin_username,)
-    ).fetchone()
-    if not admin_exists:
-        cursor.execute(
-            "INSERT INTO admins (username, password_hash) VALUES (?, ?)",
-            (admin_username, generate_password_hash(admin_password)),
-        )
-
-    connection.commit()
-    connection.close()
-
-
-init_db()
-
-
-@app.after_request
-def add_response_headers(response):
-    """Add practical security and caching headers for production delivery."""
-    response.headers.setdefault("X-Content-Type-Options", "nosniff")
-    response.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
-    response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
-    response.headers.setdefault(
-        "Permissions-Policy",
-        "camera=(), microphone=(), geolocation=()",
-    )
-    if request.path.startswith("/static/"):
-        response.headers["Cache-Control"] = "public, max-age=2592000, immutable"
-    return response
-
-
-# -----------------------------------------------------------------------------
-# Validation and authentication helpers
-# -----------------------------------------------------------------------------
-def valid_phone(phone):
-    """Accept standard South African mobile and landline number formats."""
+def valid_phone(phone: str) -> bool:
+    """Accept common South African mobile and landline formats."""
     cleaned = re.sub(r"[^\d+]", "", phone)
     return bool(re.fullmatch(r"(?:\+27|0)\d{9}", cleaned))
 
 
-def get_available_drilling_dates(days=90):
-    """Return unbooked dates from tomorrow through the requested date window."""
+def get_available_drilling_dates(days: int = 90) -> list[dict[str, str]]:
+    """Return dates not currently occupied by an active confirmed appointment."""
     today = date.today()
     last_day = today + timedelta(days=days)
     connection = get_db_connection()
-    booked_dates = {
-        row["preferred_drilling_date"]
-        for row in connection.execute(
-            """
-            SELECT preferred_drilling_date
-            FROM enquiries
-            WHERE preferred_drilling_date IS NOT NULL
-            """
-        ).fetchall()
-    }
-    connection.close()
+    try:
+        booked_dates = {
+            row["preferred_drilling_date"]
+            for row in connection.execute(
+                """
+                SELECT preferred_drilling_date
+                FROM enquiries
+                WHERE preferred_drilling_date IS NOT NULL
+                  AND appointment_status = 'Confirmed'
+                  AND is_deleted = 0
+                """
+            ).fetchall()
+        }
+    finally:
+        connection.close()
 
     available_dates = []
     current_day = today + timedelta(days=1)
     while current_day <= last_day:
         iso_date = current_day.isoformat()
         if iso_date not in booked_dates:
-            available_dates.append(
-                {
-                    "value": iso_date,
-                    "label": current_day.strftime("%A, %d %B %Y"),
-                }
-            )
+            available_dates.append({
+                "value": iso_date,
+                "label": current_day.strftime("%A, %d %B %Y"),
+            })
         current_day += timedelta(days=1)
     return available_dates
 
 
-def login_required(view_function):
-    """Protect dashboard routes from unauthenticated visitors."""
+@app.after_request
+def add_response_headers(response):
+    """Set practical baseline security and asset-cache headers."""
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
+    response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+    response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+    if request.path.startswith("/static/"):
+        response.headers["Cache-Control"] = "public, max-age=2592000, immutable"
+    if is_production():
+        response.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+    return response
 
-    @wraps(view_function)
-    def wrapped_view(*args, **kwargs):
-        if not session.get("admin_logged_in"):
-            return redirect(url_for("login"))
-        return view_function(*args, **kwargs)
 
-    return wrapped_view
+@app.errorhandler(CSRFError)
+def handle_csrf_error(error: CSRFError):
+    return (
+        "Your form session has expired or could not be verified. Please reload the page and try again.",
+        400,
+        {"Content-Type": "text/plain; charset=utf-8"},
+    )
 
 
-# -----------------------------------------------------------------------------
-# Public website routes
-# -----------------------------------------------------------------------------
 @app.route("/")
 def index():
-    # Use Flask's response helper directly because the exported ``app`` object
-    # is wrapped by DispatcherMiddleware after all routes are registered.
     response = make_response(render_template(
         "index.html",
         services=SERVICES,
         available_dates=get_available_drilling_dates(),
         year=datetime.now().year,
     ))
-    response.headers["Cache-Control"] = "public, max-age=300, stale-while-revalidate=600"
+    # The HTML contains a session-bound CSRF token; do not cache it in shared caches.
+    response.headers["Cache-Control"] = "private, no-store"
     return response
 
 
 @app.route("/submit-enquiry", methods=["POST"])
+@limiter.limit("8 per hour")
 def submit_enquiry():
-    """Validate and store a prospective client's site enquiry."""
+    """Create an enquiry with a pending appointment request, never a reservation."""
     full_name = request.form.get("full_name", "").strip()
     phone = request.form.get("phone", "").strip()
     email = request.form.get("email", "").strip()
     location = request.form.get("location", "").strip()
-    preferred_drilling_date = request.form.get(
-        "preferred_drilling_date", ""
-    ).strip()
+    requested_date_text = request.form.get("preferred_drilling_date", "").strip()
     service = request.form.get("service", "").strip()
     message = request.form.get("message", "").strip()
 
-    if len(full_name) < 2 or not valid_phone(phone) or not location:
-        flash("Please enter your name, home address and a valid South African phone number.", "error")
+    email_is_valid = not email or bool(re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email))
+    if (
+        not 2 <= len(full_name) <= 120
+        or not valid_phone(phone)
+        or not 2 <= len(location) <= 250
+        or not email_is_valid
+        or len(email) > 254
+        or len(message) > 3000
+    ):
+        flash(
+            "Please check your name, phone number, email and property address, then try again.",
+            "error",
+        )
         return redirect(url_for("index", _anchor="contact"))
 
     try:
-        requested_date = date.fromisoformat(preferred_drilling_date)
+        requested_date = date.fromisoformat(requested_date_text)
     except ValueError:
         requested_date = None
 
     first_available_day = date.today() + timedelta(days=1)
     last_available_day = date.today() + timedelta(days=90)
-    if (
-        requested_date is None
-        or requested_date < first_available_day
-        or requested_date > last_available_day
-    ):
-        flash("Please choose one of the available drilling dates.", "error")
+    if requested_date is None or not first_available_day <= requested_date <= last_available_day:
+        flash("Please choose a preferred date within the available 90-day window.", "error")
         return redirect(url_for("index", _anchor="contact"))
 
     if service not in SERVICES:
@@ -257,20 +173,21 @@ def submit_enquiry():
 
     connection = get_db_connection()
     try:
-        # BEGIN IMMEDIATE serialises competing writes. The unique index remains
-        # the final safeguard if two visitors submit the same date together.
         connection.execute("BEGIN IMMEDIATE")
-        already_booked = connection.execute(
+        confirmed = connection.execute(
             """
             SELECT id FROM enquiries
             WHERE preferred_drilling_date = ?
+              AND appointment_status = 'Confirmed'
+              AND is_deleted = 0
+            LIMIT 1
             """,
-            (preferred_drilling_date,),
+            (requested_date_text,),
         ).fetchone()
-        if already_booked:
+        if confirmed:
             connection.rollback()
             flash(
-                "That drilling date has just been booked. Please select another available date.",
+                "That date has already been confirmed for another job. Please choose a different preferred date.",
                 "error",
             )
             return redirect(url_for("index", _anchor="contact"))
@@ -279,131 +196,56 @@ def submit_enquiry():
             """
             INSERT INTO enquiries
                 (full_name, phone, email, location, preferred_drilling_date,
-                 service, message, status, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, 'New', ?)
+                 service, message, status, appointment_status, is_deleted, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'New', 'Pending Request', 0, ?)
             """,
             (
                 full_name,
                 phone,
-                email,
+                email or None,
                 location,
-                preferred_drilling_date,
+                requested_date_text,
                 service,
-                message,
+                message or None,
                 datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             ),
         )
         connection.commit()
-    except sqlite3.IntegrityError:
+    except sqlite3.Error:
         connection.rollback()
-        flash(
-            "That drilling date has just been booked. Please select another available date.",
-            "error",
-        )
+        app.logger.exception("Could not save a website enquiry")
+        flash("We could not save your request right now. Please call or WhatsApp us directly.", "error")
         return redirect(url_for("index", _anchor="contact"))
     finally:
         connection.close()
 
     flash(
-        "Thank you. Your preferred drilling date has been reserved and our team will contact you shortly.",
+        "Thank you. We received your site-survey request. Your preferred date is pending confirmation; our team will contact you to confirm availability.",
         "success",
     )
     return redirect(url_for("index", _anchor="contact"))
 
 
-# -----------------------------------------------------------------------------
-# Admin routes
-# -----------------------------------------------------------------------------
-@app.route("/admin/login", methods=["GET", "POST"])
-def login():
-    error = None
-
-    if request.method == "POST":
-        username = request.form.get("username", "").strip()
-        password = request.form.get("password", "")
-
-        connection = get_db_connection()
-        admin = connection.execute(
-            "SELECT * FROM admins WHERE username = ?", (username,)
-        ).fetchone()
+@app.route("/healthz")
+def healthz():
+    """Minimal platform-agnostic health probe; never expose database details."""
+    connection = get_db_connection()
+    try:
+        connection.execute("SELECT 1").fetchone()
+    except sqlite3.Error:
+        app.logger.exception("Health check failed: database unavailable")
+        return Response("unavailable", status=503, mimetype="text/plain")
+    finally:
         connection.close()
-
-        if admin and check_password_hash(admin["password_hash"], password):
-            session.clear()
-            session["admin_logged_in"] = True
-            session["admin_username"] = username
-            return redirect(url_for("dashboard"))
-
-        error = "Incorrect username or password."
-
-    return render_template("login.html", error=error)
+    return Response("ok", status=200, mimetype="text/plain")
 
 
-@app.route("/admin/logout")
-def logout():
-    session.clear()
-    return redirect(url_for("login"))
-
-
-@app.route("/admin")
-@login_required
-def dashboard():
-    connection = get_db_connection()
-    enquiries = connection.execute(
-        "SELECT * FROM enquiries ORDER BY created_at DESC"
-    ).fetchall()
-    connection.close()
-
-    stats = {
-        "total": len(enquiries),
-        "new": sum(item["status"] == "New" for item in enquiries),
-        "quoted": sum(item["status"] == "Quoted" for item in enquiries),
-        "scheduled": sum(item["status"] == "Scheduled" for item in enquiries),
-    }
-
-    return render_template(
-        "dashboard.html",
-        enquiries=enquiries,
-        statuses=STATUSES,
-        stats=stats,
-    )
-
-
-@app.route("/admin/status/<int:enquiry_id>", methods=["POST"])
-@login_required
-def update_status(enquiry_id):
-    status = request.form.get("status", "New")
-    if status not in STATUSES:
-        status = "New"
-
-    connection = get_db_connection()
-    connection.execute(
-        "UPDATE enquiries SET status = ? WHERE id = ?", (status, enquiry_id)
-    )
-    connection.commit()
-    connection.close()
-    return redirect(url_for("dashboard"))
-
-
-@app.route("/admin/delete/<int:enquiry_id>", methods=["POST"])
-@login_required
-def delete_enquiry(enquiry_id):
-    connection = get_db_connection()
-    connection.execute("DELETE FROM enquiries WHERE id = ?", (enquiry_id,))
-    connection.commit()
-    connection.close()
-    return redirect(url_for("dashboard"))
-
-
-# -----------------------------------------------------------------------------
-# SEO support routes
-# -----------------------------------------------------------------------------
 @app.route("/robots.txt")
 def robots_txt():
     content = (
         "User-agent: *\n"
         "Allow: /\n\n"
-        "Sitemap: https://burgersfortwaterdrilling.co.za/sitemap.xml\n"
+        "Sitemap: https://bgfwaterdrilling.co.za/sitemap.xml\n"
     )
     return Response(content, mimetype="text/plain")
 
@@ -414,7 +256,7 @@ def sitemap_xml():
     content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://burgersfortwaterdrilling.co.za/</loc>
+    <loc>https://bgfwaterdrilling.co.za/</loc>
     <lastmod>{today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -423,19 +265,23 @@ def sitemap_xml():
     return Response(content, mimetype="application/xml")
 
 
-# Mount the polished operations dashboard at /admin while keeping the public
-# website as the primary application. Render should continue using app:app.
+# Schema migrations run on every process start; migrations are serialized by SQLite.
+init_database()
+
+# Mount the separate admin Flask app after the public routes are registered.
 public_app = app
-from admin.admin_app import app as admin_app
+from admin.admin_app import app as admin_app  # noqa: E402
 
 app = DispatcherMiddleware(public_app, {"/admin": admin_app})
 
-
 if __name__ == "__main__":
+    debug_requested = os.environ.get("FLASK_DEBUG") == "1"
+    if debug_requested and is_production():
+        raise RuntimeError("FLASK_DEBUG must not be enabled when APP_ENV=production.")
     run_simple(
         "0.0.0.0",
         int(os.environ.get("PORT", 5000)),
         app,
-        use_reloader=os.environ.get("FLASK_DEBUG") == "1",
-        use_debugger=os.environ.get("FLASK_DEBUG") == "1",
+        use_reloader=debug_requested,
+        use_debugger=debug_requested,
     )
