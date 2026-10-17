@@ -35,7 +35,7 @@
     <div class="sidebar-user">
       <span>{{ session.get('admin_username', 'A')|initials }}</span>
       <div><strong>{{ session.get('admin_username', 'Admin')|title }}</strong><small>Administrator</small></div>
-      <a href="{{ url_for('logout') }}" title="Sign out">↗</a>
+      <form method="post" action="{{ url_for('logout') }}" class="logout-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" title="Sign out" aria-label="Sign out">↗</button></form>
     </div>
   </aside>
   <div class="overlay" id="overlay"></div>
@@ -43,7 +43,7 @@
     <header class="topbar">
       <button class="menu-btn" id="menuBtn" aria-label="Open navigation">☰</button>
       <div class="topbar-copy"><span>Operations centre</span><strong>Burgersfort & surrounding areas</strong></div>
-      <div class="top-actions"><a href="mailto:info@burgersfortwaterdrilling.co.za">Support</a><a class="site-btn" href="../" target="_blank">View website ↗</a></div>
+      <div class="top-actions"><a href="mailto:burgersfortwaterdrilling@gmail.com">Support</a><a class="site-btn" href="../" target="_blank">View website ↗</a></div>
     </header>
     <div class="page-wrap">
       {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}

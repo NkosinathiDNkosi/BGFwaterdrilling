@@ -38,7 +38,7 @@
   {% for enquiry in enquiries %}<tr>
     <td><div class="customer"><span>{{ enquiry.full_name|initials }}</span><div><strong>{{ enquiry.full_name }}</strong><small>{{ enquiry.phone }}{% if enquiry.email %} · {{ enquiry.email }}{% endif %}</small></div></div></td>
     <td><strong>{{ enquiry.location }}</strong><small class="subtle">Limpopo service area</small></td>
-    <td><strong>{{ enquiry.preferred_drilling_date or 'Not selected' }}</strong><small class="subtle">Estimated date</small></td>
+    <td><strong>{{ enquiry.preferred_drilling_date or 'Not selected' }}</strong><small class="subtle">Preferred date</small><small class="status status-{{ enquiry.appointment_status|lower|replace(' ', '-') }}">{{ enquiry.appointment_status }}</small></td>
     <td><strong>{{ enquiry.service }}</strong><small class="message-preview">{{ enquiry.message or 'No extra message supplied.' }}</small></td>
     <td>{{ enquiry.created_at|pretty_date }}</td>
     <td><span class="status status-{{ enquiry.status|lower }}">{{ enquiry.status }}</span></td>

@@ -224,6 +224,26 @@ select {
 .sidebar-user > a {
   color: #6d8d9f;
 }
+.logout-form {
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+.logout-form button {
+  border: 0;
+  background: transparent;
+  color: #6d8d9f;
+  font: inherit;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 7px;
+}
+.logout-form button:hover, .logout-form button:focus-visible {
+  color: #fff;
+  background: rgba(255,255,255,.08);
+  outline: 2px solid #72d7ef;
+  outline-offset: 2px;
+}
 /* 03. MAIN CONTENT AND TOP BAR */
 .main-content {
   margin-left: 260px;
@@ -719,6 +739,14 @@ td > strong {
   background: #fbe7e7;
   color: #b34b4b;
 }
+.status-pending-request {
+  background: #fff4d9;
+  color: #916515;
+}
+.status-confirmed {
+  background: #def5e9;
+  color: #11764d;
+}
 .table-action {
   font-weight: 800;
   color: #078bb8;
@@ -1134,3 +1162,7 @@ td > strong {
     gap: 20px;
   }
 }
+
+
+/* Crisp self-contained iconography: no remote icon font required. */
+.icon{display:inline-block;width:1.12em;height:1.12em;flex:0 0 auto;vertical-align:-.16em;overflow:visible;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.icon-facebook{fill:currentColor;stroke:none}
